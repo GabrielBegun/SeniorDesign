@@ -10,6 +10,8 @@ import defaults.Param;
  *   normal PID?
  * Roll
  * Yaw (based on compass?)
+ * Takeoff
+ * Land
  */
  
 public class PilotController implements Runnable {
@@ -87,7 +89,7 @@ public class PilotController implements Runnable {
   return myPilotController;
  }
  
- void init() throws TooManyListenersException{
+ public void init() throws TooManyListenersException{
 	 pilot = Pilot.getInstance(); 
 	  // Throttle
 	  desAlt = 0;

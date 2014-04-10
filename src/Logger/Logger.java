@@ -9,7 +9,7 @@ public class Logger {
 		return myLogger;
 	}
 	
-	void init(){
+	public void init(){
 		
 	}
 }

@@ -75,4 +75,9 @@ public class SensorManager implements Runnable{
 	}
 	*/
 
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

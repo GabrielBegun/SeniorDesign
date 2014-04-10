@@ -62,7 +62,16 @@ public class FireScout {
 	 sensorManager = SensorManager.getInstance();
 	 // Navigation? Quadcopter?
 	 
-	 logger.init();
+	 try {
+		logger.init();
+		pilotController.init();
+		sensorManager.init();
+	 } catch (TooManyListenersException e) {
+		e.printStackTrace();
+		// logg error
+		// maybe fall through so program exists.
+	 }
+	 
  }
  
  /***********
