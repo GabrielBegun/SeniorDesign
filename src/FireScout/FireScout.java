@@ -14,22 +14,30 @@ import communication.XbeeInterface;
  * 
  */
 
-// TODO USE AN ENUM! GEEZ!
 
 
 public class FireScout {
+	 private FireScout() { 
+		  
+		 }
+		 
+		 public static FireScout getInstance() {
+		  if(myQuadcopter == null) myQuadcopter = new FireScout();
+		  return myQuadcopter;
+		 }
+		 
 	private  static FireScout myQuadcopter;
 	private XbeeInterface xbeeInterface;
 
-	private State currState = State.DISARM;
-	private State nextState = State.DISARM;
+	private static State currState = State.DISARM;
+	private static State nextState = State.DISARM;
 
 	private Logger logger;
 	private PilotController pilotController;
 	private SensorManager sensorManager;
 
  //Variables
- private Boolean Xtest1 = false;
+/* private Boolean Xtest1 = false;
  private Boolean Xtest2 = false;
  private Boolean XtakeoffLand = false;
  
@@ -45,16 +53,8 @@ public class FireScout {
  //each of the hover(), room(), hallway() functions 
  //  should return one of these numbers
  private int QcurrAction = 10;
-
- private FireScout() { 
-  myQuadcopter = FireScout.getInstance(); 
- }
- 
- public static FireScout getInstance() {
-  if(myQuadcopter == null) myQuadcopter = new FireScout();
-  return myQuadcopter;
- }
- 
+*/
+	
  void init(){
 	 // Creates all instances of the lower classes 
 	 logger = Logger.getInstance();
@@ -92,28 +92,32 @@ public class FireScout {
  	 LAND
  }
  
- private void parseCommand (String str) {
-  if (str.equals("Start"))
-   //do something....
-    return;
-  else if (str.equals("Test1"))
-   Xtest1 = true;
-  else if (str.equals("Test2"))
-   Xtest2 = true;
-  else if (str.equals("Return"))
-   //return to base (Navigation?)
-    return;
-  else if (str.equals("Takeoff and land"))
-   //PilotController.takeoffLand();
-    return;
-  else
-    try{
-    xbeeInterface.sendCopterData("Error parsing.");
-  }
-  catch (Exception e) {
-     System.err.println(e.toString()); 
-  }
+ public void parseCommand (String str) {
+	 if (str.equals("Start")) {
+		 nextState = State.TEST1;
+		 return;
+	 } else if (str.equals("Stop")){
+		 nextState = State.LAND;
+		 return;
+	 } else if (str.equals("Test1")){
+		 //if( test1() ) logger.write("");
+		 //else logger.write("fail");
+		 return;
+ 	} else if (str.equals("Return")) {
+ 		 //return to base (Navigation?)
+ 		 return;
+ 	} else if (str.equals("TakeoffLand")) {
+ 		 pilotController.takeoffLand();
+ 		 return;
+ 	} else {
+ 		try{
+ 			xbeeInterface.sendCopterData("Error parsing.");
+ 		}
+	 	catch (Exception e) {
+	 		System.err.println(e.toString()); 
+	 	}
   
+ 	}
  }
  
  	private boolean test1(){
@@ -142,7 +146,7 @@ public class FireScout {
  		return true;
  	}
  
- public void main (String[] args){
+ public static void main (String[] args){
 	 FireScout fireScout = FireScout.getInstance();
 	 fireScout.init();
 	 while(true){
@@ -150,7 +154,8 @@ public class FireScout {
 	    case DISARM: 
 	    	// Stay here until xBee tells you to start;
 	    	// TODO
-	    
+	    	break;
+	    	
 	    case TEST1:
 	    	if (fireScout.test1()) nextState = State.TAKEOFF;
 	    	else nextState = State.DISARM;

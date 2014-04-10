@@ -10,21 +10,24 @@ import gnu.io.SerialPortEventListener;
 //import java.util.LinkedList;
 
 
+
 import java.util.TooManyListenersException;
 import java.io.*;
 
+import FireScout.FireScout;
 import util.UartDriver2;
 
 public class XbeeInterface{
 
     private UartDriver2 uartXbee;
+    private FireScout fireScout;
  
  private static XbeeInterface myXbee;
  private XbeeInterface() throws TooManyListenersException { 
   uartXbee = new UartDriver2("/dev/ttyO5"); 
   uartXbee.initialize();
   uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws TooManyListenersException. This is a nested child class examples
-
+  fireScout = FireScout.getInstance();
  }
     public static XbeeInterface getInstance() throws TooManyListenersException{
      if(myXbee == null) myXbee = new XbeeInterface();
@@ -41,7 +44,7 @@ public class XbeeInterface{
   if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
    try {
     String str = uartXbee.input.readLine();
-    //Send command to Quadcopter (FSM)
+    fireScout.parseCommand(str);
     //Logger
     } catch (Exception e) {
      System.err.println(e.toString()); // TODO

@@ -104,51 +104,47 @@ public class PilotController implements Runnable {
 	  prevErrorAlt_p = 0;
 	  errorIntegral_p = 0.0f;
 	  prevTime_p = (double)System.currentTimeMillis();
-	 
  }
  
  public void run() {
   //System.out.println("HERE i AM!");
   double current_altitude = 0;
-  while (!shutdown) {
-      
+  while (!shutdown) {  
       try {
 //       current_altitude = SensorMonitor.getAltitude(); or something like this
-       setThrottleWithAltitude(current_altitude++);
-       
-        
+       setThrottleWithAltitude(current_altitude++); 
        pilot.sync();
-             Thread.sleep(333);
-             
-            } catch (InterruptedException e) {
-                // good practice
-                Thread.currentThread().interrupt();
-                return;
-            } catch (IOException e1) {
-     // TODO Auto-generated catch block
-     e1.printStackTrace();
-    }
-        }
-  
- }
+       Thread.sleep(333);          
+      } catch (InterruptedException e) {
+    	  // good practice
+    	  Thread.currentThread().interrupt();
+    	  return;
+      } catch (IOException e1) {
+    	  // TODO Auto-generated catch block
+    	  e1.printStackTrace();
+      }
+  }  
+}
  
-    public static void main(String[] args)
-     {
-     PilotController u;
-  try {
-   u = PilotController.getInstance();
-   u.run();
-   u.setDesAlt(40);
-   Thread.sleep(3000);
-   u.setDesAlt(4);;
-   Thread.sleep(3000);
-   u.shutdownConroller();
-  } catch (InterruptedException e) {
-   // TODO Auto-generated catch block
-   e.printStackTrace();
-  }
-   System.out.println("DONE");
-     }
- 
- 
+ 	public void takeoffLand(){
+ 		// TODO
+ 	}
+ 	
+ /*
+    public static void main(String[] args) {
+    	PilotController u;
+		try {
+			  u = PilotController.getInstance();
+			  u.run();
+			  u.setDesAlt(40);
+			  Thread.sleep(3000);
+			  u.setDesAlt(4);;
+			  Thread.sleep(3000);
+			  u.shutdownConroller();
+		  } catch (InterruptedException e) {
+			  // TODO Auto-generated catch block
+			  e.printStackTrace();
+		  }
+		  System.out.println("DONE");
+    } */
 }

@@ -33,7 +33,7 @@ public class IRCamera {
         try {
           String str = uartRPI.input.readLine();
           // TODO
-// logger.write(Timestamp+": IRCamer, Receive: " + str);
+          // logger.write(Timestamp+": IRCamer, Receive: " + str);
           // Check if positive, then call the appropiate function. It may be a good idea to only call the function if we detect something X times in a row
         } catch (Exception e) {
           System.err.println(e.toString()); // TODO
