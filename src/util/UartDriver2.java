@@ -1,4 +1,4 @@
-package communication;
+package util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,7 +15,7 @@ public class UartDriver2 {
 		port_name = str;
 	}
 	
- SerialPort serialPort;
+ public SerialPort serialPort;
  private String port_name;
         /** The port we're normally going to use. */
  private static final String PORT_NAMES[] = { 

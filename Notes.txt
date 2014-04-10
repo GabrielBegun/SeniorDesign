@@ -1,0 +1,7 @@
+TODO
+
+Mikhail - separate the GUI - Map - world. We need navigation to be its own thing
+
+Gabe - Finish the PID loops
+
+Set EVERYIONE up with this project. It is easy to integrate on Eclipse (in theory haha)

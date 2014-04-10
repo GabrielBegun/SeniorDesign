@@ -12,6 +12,8 @@ import java.util.TooManyListenersException;
 import java.io.*;
 //import gnu.io.*;
 
+import util.UartDriver2;
+
 public class Pilot{
 	private static Pilot myPilot;
 	private Pilot() throws TooManyListenersException { 

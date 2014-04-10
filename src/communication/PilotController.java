@@ -2,7 +2,7 @@ package communication;
 
 import java.io.IOException;
 import java.util.TooManyListenersException;
-
+import defaults.Param;
 /* TODO
  * Tune Throttle PID
  * Pitch:
@@ -33,23 +33,6 @@ public class PilotController implements Runnable {
  private double prevTime_p;
 
  // PID parameters
- // Throttle - Altitude 
- final int throttleMax = 500; //very high, will change
- final int throttleMin = 130;
- final int throttleDeltaMax = 10;
- final double throttleScale = 1;
- final double kP_t = 0.1;
- final double kI_t = 0.02;
- final double kD_t = 0.005;
- 
- // Pitch - Laser Range Finder
- final int pitchMax = 20; //very high, will change
- final int pitchMin = -20;
- final int pitchDeltaMax = 10;
- final double pitchScale = 1;
- final double kP_p = 0.1;
- final double kI_p = 0.02;
- final double kD_p = 0.005;
  
  private void setThrottleWithAltitude(double current_altitude) {
      // Calculate time since last read 
@@ -66,21 +49,21 @@ public class PilotController implements Runnable {
      double differentialAlt = errorAlt - prevErrorAlt_t;
 
      //adding the PID to current throttle command
-     double addPAlt = kP_t*(errorAlt);
-     double addIAlt = kI_t*errorIntegral_t;
-     double addDAlt = kD_t*(differentialAlt);
+     double addPAlt = Param.kP_t*(errorAlt);
+     double addIAlt = Param.kI_t*errorIntegral_t;
+     double addDAlt = Param.kD_t*(differentialAlt);
 
      //int throttleChange = throttleScale*(int)(addPAlt+addIAlt+addDAlt);
-     int throttleChange = (int)(throttleScale * addPAlt); // Remove for full PID
-     if(throttleChange > throttleDeltaMax) throttleChange = throttleDeltaMax;
-     if(throttleChange < -throttleDeltaMax) throttleChange = -throttleDeltaMax;
+     int throttleChange = (int)(Param.throttleScale * addPAlt); // Remove for full PID
+     if(throttleChange > Param.throttleDeltaMax) throttleChange = Param.throttleDeltaMax;
+     if(throttleChange < -Param.throttleDeltaMax) throttleChange = -Param.throttleDeltaMax;
      int newThrottle = prevThrottle + throttleChange;
      
      // Boundry check the new Throttle
-     if(newThrottle > throttleMax ){
-       newThrottle = throttleMax;
-     } else if(newThrottle < throttleMin) {
-       newThrottle = throttleMin;
+     if(newThrottle > Param.throttleMax ){
+       newThrottle = Param.throttleMax;
+     } else if(newThrottle < Param.throttleMin) {
+       newThrottle = Param.throttleMin;
      }
      
      pilot.setThrottle(newThrottle);
@@ -105,6 +88,7 @@ public class PilotController implements Runnable {
   prevErrorAlt_t = 0;
   errorIntegral_t = 0.0f;
   prevTime_t = (double)System.currentTimeMillis();
+  
   // Pitch
   desDist = 0;
   prevPitch = 0;
