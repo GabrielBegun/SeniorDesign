@@ -93,7 +93,7 @@ public class FireScout {
 			return;
 		} else {
 			try{
-				xbeeInterface.sendCopterData("Error parsing.");
+				xbeeInterface.write("Error parsing.");
 			}
 			catch (Exception e) {
 				System.err.println(e.toString()); 
