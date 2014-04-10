@@ -2,33 +2,31 @@ package FireScout;
 import java.io.IOException;
 import java.util.TooManyListenersException;
 
+import Logger.Logger;
+import sensor.SensorManager.SensorManager;
+import communication.PilotController;
 import communication.XbeeInterface;
 
 /* This is the main class of our project. On bootup, the beagleboard should run this class
  * All other classes are created from here. Their respective main() are meant to be only for testing
  * 
  * This class was previously called FSM
+ * 
  */
 
 // TODO USE AN ENUM! GEEZ!
 
 
 public class FireScout {
- private  static FireScout myQuadcopter;
- private XbeeInterface xbeeInterface;
+	private  static FireScout myQuadcopter;
+	private XbeeInterface xbeeInterface;
 
- private int currState = 0;
- private int nextState = 0;
+	private State currState = State.DISARM;
+	private State nextState = State.DISARM;
 
- /***********
- FSM
- 0 = Disarm
- 1 = Test 1
- 2 = Takeoff
- 3 = Test 2
- 4 = Hover | Room | Hallway
- 5 = Land
- ***********/
+	private Logger logger;
+	private PilotController pilotController;
+	private SensorManager sensorManager;
 
  //Variables
  private Boolean Xtest1 = false;
@@ -48,13 +46,41 @@ public class FireScout {
  //  should return one of these numbers
  private int QcurrAction = 10;
 
- private FireScout() throws TooManyListenersException { 
+ private FireScout() { 
   myQuadcopter = FireScout.getInstance(); 
  }
  
- public static FireScout getInstance() throws TooManyListenersException {
+ public static FireScout getInstance() {
   if(myQuadcopter == null) myQuadcopter = new FireScout();
   return myQuadcopter;
+ }
+ 
+ void init(){
+	 // Creates all instances of the lower classes 
+	 logger = Logger.getInstance();
+	 pilotController = PilotController.getInstance();
+	 sensorManager = SensorManager.getInstance();
+	 // Navigation? Quadcopter?
+	 
+	 logger.init();
+ }
+ 
+ /***********
+ FSM
+ 0 = Disarm
+ 1 = Test 1
+ 2 = Takeoff
+ 3 = Test 2
+ 4 = Hover | Room | Hallway
+ 5 = Land
+ ***********/
+ public enum State{
+ 	 DISARM,
+ 	 TEST1,
+ 	 TAKEOFF,
+ 	 TEST2,
+ 	 NAVIGATION,
+ 	 LAND
  }
  
  private void parseCommand (String str) {
@@ -81,63 +107,71 @@ public class FireScout {
   
  }
  
+ 	private boolean test1(){
+ 		// TODO
+ 		return true;
+ 	}
+ 	
+ 	private boolean takeoff(){
+ 		
+ 		// TODO
+ 		return true;
+ 	}
+ 	
+ 	private boolean test2(){
+ 		// TODO
+ 		return true;
+ 	}
+ 	
+ 	private boolean navigation(){
+ 		// TODO
+ 		return true;
+ 	}
+ 	
+ 	private boolean land(){
+ 		// TODO
+ 		return true;
+ 	}
+ 
  public void main (String[] args){
-  while(true){
-   switch (currState) {
-    case 0: 
-     if (Xtest1)
-      nextState = 1;
-     else
-      nextState = 0;
-     break;
-    
-    case 1:
-     //Qtest1 = TEST 1
-     if (Qtest1)
-      nextState = 2;
-     else
-      nextState = 0;
-     //Reset Qtest1? 
-     break;
-     
-    case 2: 
-     //PilotController.takeoff();
-     nextState = 3;
-     break;
-    
-    case 3:
-     //Qtest2 = TEST 2
-     if (Qtest2)
-      nextState = 4;
-     else
-      nextState = 5;
-     //Reset Qtest2?
-     break;
-     
-    case 4:
-     if (QcurrAction == 11) 
-      //QcurrAction = Navigation.room();
-      return;
-     else if (QcurrAction == 12)
-      //QcurrAction = Navigation.hallway();
-      return;
-     else if (QcurrAction == 13)
-      nextState = 5; 
-     else //If not room or hallway, just hover
-      //QcurrAction = Navigation.hover();
-       return;
-     break;
-    
-    case 5:
-     //PilotController.land();
-     nextState = 0;
-     break;
-    
-    default:
-     //Navigation.hover();
-     break;
-   }
-   currState = nextState;
-  }
+	 FireScout fireScout = FireScout.getInstance();
+	 fireScout.init();
+	 while(true){
+	   switch (currState) {
+	    case DISARM: 
+	    	// Stay here until xBee tells you to start;
+	    	// TODO
+	    
+	    case TEST1:
+	    	if (fireScout.test1()) nextState = State.TAKEOFF;
+	    	else nextState = State.DISARM;
+	    	break;
+	     
+	    case TAKEOFF: 
+	    	if (fireScout.takeoff()) nextState = State.TEST2;
+	    	else nextState = State.LAND;
+	    	break;
+	    
+	    case TEST2:
+	    	if (fireScout.test2()) nextState = State.NAVIGATION;
+	    	else nextState = State.LAND;
+	    	break;
+	     
+	    case NAVIGATION:
+	    	if (fireScout.navigation()) nextState = State.LAND;
+	    	else nextState = State.LAND;
+	    	break;
+	    
+	    case LAND:
+		     fireScout.land();
+		     nextState = State.DISARM;
+		     break;
+		     
+	    default:
+	    	nextState = State.LAND;
+	     break;
+	   }
+	   currState = nextState;
+	  }
  }
 }

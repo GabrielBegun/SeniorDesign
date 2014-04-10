@@ -80,27 +80,31 @@ public class PilotController implements Runnable {
  
  // Private constructor
  private static PilotController myPilotController;
- private PilotController() throws TooManyListenersException { 
-  pilot = Pilot.getInstance(); 
-  // Throttle
-  desAlt = 0;
-  prevThrottle = 0;
-  prevErrorAlt_t = 0;
-  errorIntegral_t = 0.0f;
-  prevTime_t = (double)System.currentTimeMillis();
+ private PilotController() { }
   
-  // Pitch
-  desDist = 0;
-  prevPitch = 0;
-  prevErrorAlt_p = 0;
-  errorIntegral_p = 0.0f;
-  prevTime_p = (double)System.currentTimeMillis();
- }
- public static PilotController getInstance() throws TooManyListenersException {
+ public static PilotController getInstance() {
   if(myPilotController == null) myPilotController = new PilotController();
   return myPilotController;
  }
-
+ 
+ void init() throws TooManyListenersException{
+	 pilot = Pilot.getInstance(); 
+	  // Throttle
+	  desAlt = 0;
+	  prevThrottle = 0;
+	  prevErrorAlt_t = 0;
+	  errorIntegral_t = 0.0f;
+	  prevTime_t = (double)System.currentTimeMillis();
+	  
+	  // Pitch
+	  desDist = 0;
+	  prevPitch = 0;
+	  prevErrorAlt_p = 0;
+	  errorIntegral_p = 0.0f;
+	  prevTime_p = (double)System.currentTimeMillis();
+	 
+ }
+ 
  public void run() {
   //System.out.println("HERE i AM!");
   double current_altitude = 0;
@@ -137,9 +141,6 @@ public class PilotController implements Runnable {
    u.setDesAlt(4);;
    Thread.sleep(3000);
    u.shutdownConroller();
-  } catch (TooManyListenersException e) {
-   // TODO Auto-generated catch block
-   e.printStackTrace();
   } catch (InterruptedException e) {
    // TODO Auto-generated catch block
    e.printStackTrace();
