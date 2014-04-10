@@ -5,6 +5,8 @@ import gnu.io.SerialPortEventListener;
 
 import java.util.TooManyListenersException;
 
+import util.UartDriver2;
+
 
 /* This class interfaces with the RPI, which is connected to the DRS thermal camera and is running HOG
  * One of the future plans is to add feature detection to go through doors. This feature is not implemented */
@@ -30,6 +32,7 @@ public class IRCamera {
       if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
         try {
           String str = uartRPI.input.readLine();
+          // TODO
 // logger.write(Timestamp+": IRCamer, Receive: " + str);
           // Check if positive, then call the appropiate function. It may be a good idea to only call the function if we detect something X times in a row
         } catch (Exception e) {
