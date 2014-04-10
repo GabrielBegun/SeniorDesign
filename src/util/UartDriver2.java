@@ -18,12 +18,12 @@ public class UartDriver2 {
  public SerialPort serialPort;
  private String port_name;
         /** The port we're normally going to use. */
- private static final String PORT_NAMES[] = { 
+ /*private static final String PORT_NAMES[] = { 
    "/dev/tty.usbserial-A9007UX1", // Mac OS X
                         "/dev/ttyACM0", // Raspberry Pi
    "/dev/ttyUSB0", // Linux
-   "COM15", // Windows
- };
+   "COM15", // Windows 
+ }; */
  /**
  * A BufferedReader which will be fed by a InputStreamReader 
  * converting the bytes into characters 
@@ -43,6 +43,8 @@ public class UartDriver2 {
                 //System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
 
   CommPortIdentifier portId = null;
+  
+  @SuppressWarnings("rawtypes")
   Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
   while (portEnum.hasMoreElements()) {

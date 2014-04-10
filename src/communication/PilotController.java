@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.TooManyListenersException;
 import defaults.Param;
 /* TODO
+ * Receive data! (Pilot)
  * Tune Throttle PID
  * Pitch:
  *   int or double?
@@ -34,8 +35,8 @@ public class PilotController implements Runnable {
  private double errorIntegral_p; //errorIntegral starts at 0
  private double prevTime_p;
 
- // PID parameters
- 
+
+ // PID loops
  private void setThrottleWithAltitude(double current_altitude) {
      // Calculate time since last read 
      double currentTime = (double)System.currentTimeMillis();
@@ -55,11 +56,11 @@ public class PilotController implements Runnable {
      double addIAlt = Param.kI_t*errorIntegral_t;
      double addDAlt = Param.kD_t*(differentialAlt);
 
-     //int throttleChange = throttleScale*(int)(addPAlt+addIAlt+addDAlt);
-     int throttleChange = (int)(Param.throttleScale * addPAlt); // Remove for full PID
+     double throttleChange = Param.throttleScale*(addPAlt+addIAlt+addDAlt);
+     //int throttleChange = (int)(Param.throttleScale * addPAlt); // Remove for full PID
      if(throttleChange > Param.throttleDeltaMax) throttleChange = Param.throttleDeltaMax;
      if(throttleChange < -Param.throttleDeltaMax) throttleChange = -Param.throttleDeltaMax;
-     int newThrottle = prevThrottle + throttleChange;
+     int newThrottle = prevThrottle + (int)throttleChange;
      
      // Boundry check the new Throttle
      if(newThrottle > Param.throttleMax ){
@@ -69,7 +70,7 @@ public class PilotController implements Runnable {
      }
      
      pilot.setThrottle(newThrottle);
-     System.out.println("newThrottle" +  newThrottle);
+     //System.out.println("newThrottle" +  newThrottle);
 
      prevThrottle = newThrottle;
      prevErrorAlt_t = errorAlt; 
@@ -120,7 +121,6 @@ public class PilotController implements Runnable {
     	  Thread.currentThread().interrupt();
     	  return;
       } catch (IOException e1) {
-    	  // TODO Auto-generated catch block
     	  e1.printStackTrace();
       }
   }  
@@ -142,7 +142,6 @@ public class PilotController implements Runnable {
 			  Thread.sleep(3000);
 			  u.shutdownConroller();
 		  } catch (InterruptedException e) {
-			  // TODO Auto-generated catch block
 			  e.printStackTrace();
 		  }
 		  System.out.println("DONE");

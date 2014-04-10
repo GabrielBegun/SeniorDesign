@@ -10,8 +10,8 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.TooManyListenersException;
 import java.io.*;
-//import gnu.io.*;
 
+import Logger.Logger;
 import util.UartDriver2;
 
 public class Pilot{
@@ -19,8 +19,9 @@ public class Pilot{
 	private Pilot() throws TooManyListenersException { 
 		uartArduPilot = new UartDriver2("/dev/ttyO4"); 
 		uartArduPilot.initialize();
-		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws TooManyListenersException. This is a nested child class examples
-
+		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws, fails if initialize fails
+		logger = Logger.getInstance();
+		xBeeInterface = XbeeInterface.getInstance();
 	}
     public static Pilot getInstance() throws TooManyListenersException{
     	if(myPilot == null) myPilot = new Pilot();
@@ -28,7 +29,9 @@ public class Pilot{
     }
     
     private UartDriver2 uartArduPilot;
-  private static Queue<String> messageQueue = new LinkedList<String>();
+    private Logger logger;
+    private XbeeInterface xBeeInterface;
+    private static Queue<String> messageQueue = new LinkedList<String>();
   
   // Variables read from ArduPilot
   private boolean flyMode;
@@ -41,15 +44,16 @@ public class Pilot{
   private int battery;
   private int compass;
   
-  
+  String temp;
   private void sendMessage() throws IOException {
 	  uartArduPilot.output.write(String.format("s%02d\n",messageQueue.size()).getBytes()); 
       //System.out.println(String.format("s%02d",messageQueue.size()));
-
-      // TODO check response
-
-       while(messageQueue.size() > 0)
-    	   uartArduPilot.output.write(messageQueue.poll().getBytes());
+       while(messageQueue.size() > 0){
+    	   temp = messageQueue.poll();
+    	   uartArduPilot.output.write(temp.getBytes());
+    	   logger.write("Pilot out:"+temp);
+    	   xBeeInterface.write("Pilot out:"+temp);
+       }
     return;
   }
 
@@ -82,10 +86,9 @@ public class Pilot{
   }
   
   public void parseCommand(String str){
-	  String delims = ",";
-	  String messageTokens[] = str.split(delims);
-	  //Send to xbee
-	  
+//	  String delims = ",";
+//	  String messageTokens[] = str.split(delims);
+	  // TODO
   }
   
   private class PilotSerialPortEventListener implements SerialPortEventListener{
@@ -94,10 +97,10 @@ public class Pilot{
 			  try {
 				  String str = uartArduPilot.input.readLine();
 				  parseCommand(str);
-				  //System.out.println("Message Received: "+str);
-				  // Logger
+				  logger.write("Pilot in: "+str);
+				  xBeeInterface.write("Pilot in: "+str);
 			  } catch (Exception e) {
-				  System.err.println(e.toString()); // TODO
+				  System.err.println(e.toString());
 			  }
 		  } else { // Ignore all the other eventTypes, but you should consider the other ones.
 			  System.out.println("Serial Port Event not handled received");
