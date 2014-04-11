@@ -9,11 +9,13 @@ import gnu.io.SerialPortEventListener;
 //import java.util.LinkedList;
 
 
+
 import java.util.TooManyListenersException;
 import java.io.*;
 
 import defaults.Param;
 import FireScout.FireScout;
+import Logger.Logger;
 import util.UartDriver;
 
 public class XbeeInterface {

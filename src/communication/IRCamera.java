@@ -5,6 +5,7 @@ import gnu.io.SerialPortEventListener;
 
 import java.util.TooManyListenersException;
 
+import Logger.Logger;
 import defaults.Param;
 import util.UartDriver;
 

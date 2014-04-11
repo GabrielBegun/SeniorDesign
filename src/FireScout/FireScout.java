@@ -168,7 +168,9 @@ public class FireScout {
 			case LAND:
 				fireScout.land();
 				nextState = State.DISARM;
-				break;
+				// temp
+				return;
+				//break;
 
 			default:
 				nextState = State.LAND;
