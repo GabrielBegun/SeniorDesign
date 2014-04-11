@@ -1,8 +1,11 @@
 package Logger;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import defaults.Param;
 
 public class Logger {
 	private static Logger myLogger;
@@ -21,10 +24,12 @@ public class Logger {
 
 	public void init() {
 
+		File dir = new File(Param.LOGDIR);
+		File files[] = dir.listFiles();
+		String filename = Param.LOGDIR + Param.FILEBASE + files.length +  Param.FILEEND;
+		
 		try {
-			// create text file within previousLogs directory
-			fw = new FileWriter(
-					"previousLogs/myLog.txt");
+			fw = new FileWriter(filename);
 			bw = new BufferedWriter(fw);
 
 		} catch (IOException e) {
@@ -35,13 +40,19 @@ public class Logger {
 	}
 
 	public void write(String str) {
-		// function to write to file
 		try {
 			bw.write(str + "\n");
-			// save changes to file via flush command
 			bw.flush();
 		} catch (IOException e) {
 			System.out.println("Error writing to file");
 		}
 	}
+	
+	/* Main for testing
+	public static void main (String[] args){
+		Logger logger = Logger.getInstance();
+		logger.init();
+		logger.write("HEY THERE BUDDY!");
+	}
+	*/
 }

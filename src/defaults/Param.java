@@ -29,4 +29,10 @@ public class Param {
 	 public static String UARTLASER = "/dev/ttyO2";
 	 public static String UARTXBEE = "/dev/ttyO4";
 	 public static String UARTIRCAM = "/dev/ttyO5";
+	 
+	 // Logger
+	 public static String LOGDIR = "previousLogs/";
+	 public static String FILEBASE = "log";
+	 public static String FILEEND = ".txt";
+		
 }
