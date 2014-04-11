@@ -31,6 +31,9 @@ public class SensorManager implements Runnable{
 	private final int[] GPIO_PINS = {48, 49, 60, 51, 7, 66, 69, 45, 23, 47, 27, 22, 67, 68, 44, 26, 46, 65};
 
 	private SensorManager(){
+	}
+
+	public void init(){
 		try{
 			underling_laser = new LaserSensorInterface();
 			underling_laser.giveID(0);
@@ -47,16 +50,15 @@ public class SensorManager implements Runnable{
 			sensorOrientation = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
 			sensorPosition = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
 			ranges = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
+			
+			
+			underling_laser.init();
+			for(int ii = 0; ii < underling_sonar_gpio.length; ii++)
+				underling_sonar_gpio[ii].init();
 		} catch(Exception e){
 			System.out.println("Error in Sensor Manager construction");
 			e.printStackTrace();
 		}
-	}
-
-	public void init(){
-		underling_laser.init();
-		for(int ii = 0; ii < underling_sonar_gpio.length; ii++)
-			underling_sonar_gpio[ii].init();
 	}
 
 	public static SensorManager getInstance(){
