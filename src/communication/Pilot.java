@@ -17,7 +17,7 @@ import util.UartDriver;
 public class Pilot{
 	private static Pilot myPilot;
 	private Pilot() throws TooManyListenersException { 
-		uartArduPilot = new UartDriver("/dev/ttyO4"); 
+		uartArduPilot = new UartDriver("/dev/ttyO1"); 
 		uartArduPilot.initialize();
 		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws, fails if initialize fails
 		logger = Logger.getInstance();

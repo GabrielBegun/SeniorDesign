@@ -22,7 +22,7 @@ public class XbeeInterface {
 	private static XbeeInterface myXbee;
 
 	private XbeeInterface() throws TooManyListenersException {
-		uartXbee = new UartDriver("/dev/ttyO5");
+		uartXbee = new UartDriver("/dev/ttyO4");
 		uartXbee.initialize();
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		// TooManyListenersException.

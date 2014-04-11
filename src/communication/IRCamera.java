@@ -17,7 +17,7 @@ public class IRCamera {
 	private static IRCamera myIRCamera;
 
 	private IRCamera() throws TooManyListenersException {
-		uartRPI = new UartDriver("/dev/ttyO6"); // fix port
+		uartRPI = new UartDriver("/dev/ttyO5");
 		uartRPI.initialize();
 		uartRPI.serialPort
 		.addEventListener(new IRCameraSerialPortEventListener()); // Throws

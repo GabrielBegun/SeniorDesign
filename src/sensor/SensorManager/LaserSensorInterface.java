@@ -10,7 +10,7 @@ import util.UartDriver;
 
 public class LaserSensorInterface{
 	private UartDriver uart;
-	private String UART_PORT_NAME = "/dev/ttyO4";
+	private String UART_PORT_NAME = "/dev/ttyO2";
 	private SensorManager theBoss;
 	private int ID;
 
