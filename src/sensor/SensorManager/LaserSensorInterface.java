@@ -14,8 +14,7 @@ public class LaserSensorInterface{
 	private SensorManager theBoss;
 	private int ID;
 
-	public LaserSensorInterface(String port) throws TooManyListenersException{
-		UART_PORT_NAME = port;
+	public LaserSensorInterface() throws TooManyListenersException{
 		uart = new UartDriver(UART_PORT_NAME);
 		uart.initialize();
 		uart.serialPort.addEventListener(new LaserSerialPortEventListner());

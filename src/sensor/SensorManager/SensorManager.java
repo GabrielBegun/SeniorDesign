@@ -32,7 +32,7 @@ public class SensorManager implements Runnable{
 
 	private SensorManager(){
 		try{
-			underling_laser = new LaserSensorInterface("/dev/ttyO4");
+			underling_laser = new LaserSensorInterface();
 			underling_laser.giveID(0);
 			/*underling_sonar_analog = new SonarAnalogSensorInterface[NUM_ANALOG_SENSORS];
 			for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++){
