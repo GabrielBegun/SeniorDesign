@@ -56,7 +56,7 @@ public class UartDriver {
    }
   }
   if (portId == null) {
-   System.out.println("Could not find COM port."); // TODO throw
+   System.out.println("Could not find COM port " + port_name); // TODO throw
    return;
   }
 
