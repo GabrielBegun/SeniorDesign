@@ -11,6 +11,16 @@ public class SensorManager implements Runnable{
 	private final int NUM_ANALOG_SENSORS = 2;
 	private final int NUM_GPIO_SENSORS = 8;
 
+	private final int LASER_TIMER = 17;
+	private final int SONAR_ANALOG_TIMER = 20;
+	private final int SONAR_GPIO_TIMER = 24;
+
+	private final int[] GPIOA = {0, 2, 4, 6};
+	private final int[] GPIOB = {1, 3, 5, 7};
+
+	private final int DELAY = 5;
+
+
 	private LaserSensorInterface underling_laser;
 	//private SonarAnalogSensorInterface[] underling_sonar_analog;
 	private SonarGPIOSensorInterface[] underling_sonar_gpio;
@@ -61,17 +71,46 @@ public class SensorManager implements Runnable{
 
 	public void run(){
 		init();
+		int laser_counter = 0;
+		int sonar_a_counter = 0;
+		int sonar_g_counterA = 0;
+		int sonar_g_counterB = SONAR_GPIO_TIMER/2;
+
 		while(true){
 			try{
-				//underling_laser.getRanging();
-			/*	for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++)
-					underling_sonar_analog[ii].getRanging(); */
-				for(int ii = 0; ii < NUM_GPIO_SENSORS; ii++){
-					Thread.sleep(10);
-					System.out.println("Starting " + (ii + NUM_LASER_SENSORS + NUM_ANALOG_SENSORS));
-					underling_sonar_gpio[ii].getRanging();
+				if(laser_counter == LASER_TIMER){
+					underling_laser.getRanging();
+					laser_counter = 0;
+				} else{
+					laser_counter++;
 				}
-				Thread.sleep(500);
+
+				if(sonar_a_counter == SONAR_ANALOG_TIMER){
+					for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++)
+						/* underling_sonar_analog[ii].getRanging()*/;
+					sonar_a_counter = 0;
+				} else{
+					sonar_a_counter++;
+				}
+
+				if(sonar_g_counterA == SONAR_GPIO_TIMER){
+					for(int ii = 0; ii < GPIOA.length; ii++){
+						underling_sonar_gpio[GPIOA[ii]].getRanging();
+					}
+					sonar_g_counterA = 0;
+				} else{
+					sonar_g_counterA++;
+				}
+
+				if(sonar_g_counterB == SONAR_GPIO_TIMER){
+					for(int ii = 0; ii < GPIOB.length; ii++){
+						underling_sonar_gpio[GPIOB[ii]].getRanging();
+					}
+					sonar_g_counterB = 0;
+				} else{
+					sonar_g_counterB++;
+				}
+				Thread.sleep(DELAY);
 			} catch(Exception e){
 				System.out.println("Error in SensorManager run");
 				e.printStackTrace();
