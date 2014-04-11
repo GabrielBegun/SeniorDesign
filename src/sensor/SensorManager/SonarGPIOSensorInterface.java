@@ -1,5 +1,3 @@
-package sensor.SensorManager;
-
 import java.lang.Process;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,28 +6,34 @@ import java.lang.Exception;
 
 
 public class SonarGPIOSensorInterface{
-	String filename;
 	final String C_CALL_NAME = "s_gpio";
 	private int ID;
 	private SensorManager theBoss;
+	private int trig_pin, echo_pin;
 
-	public SonarGPIOSensorInterface(String filename){
-		this.filename = filename;
+	public SonarGPIOSensorInterface(int trig_pin, int echo_pin){
+		this.trig_pin = trig_pin;
+		this.echo_pin = echo_pin;
+	}
+
+	public void init(){
 		theBoss = SensorManager.getInstance();
 	}
 
 	public void getRanging(){
 		double range = -1;
-		String s;
+		String s = "";
 		try{
-			Process p = Runtime.getRuntime().exec("./" + C_CALL_NAME + " " + filename);
+			Process p = Runtime.getRuntime().exec("./" + C_CALL_NAME + " " + trig_pin + " " + echo_pin);
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			//while((s = stdInput.readLine()) == null);
 			while((s = stdInput.readLine()) != null){
+				//System.out.println(s);
 				break;
 			}
 			range = Double.parseDouble(s);
 		} catch(Exception e){
-			System.out.println("Exception occured.");
+			System.out.println("Exception occured. " + s);
 			e.printStackTrace();
 		}
 		

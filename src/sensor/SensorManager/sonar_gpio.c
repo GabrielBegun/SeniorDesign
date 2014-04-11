@@ -10,30 +10,39 @@
 int setupGPIO(char *pszGPIO, char *pszDir, int direction);
 void freeGPIO(char *pszGPIO); 
 void pulse_out(int fd, long microseconds); 
-int pulse_in(int fd);
+int pulse_in(int fd, char *pin);
 struct sched_param param;
+long TIMEOUT = 1000;
 
-char* filename;
+char *trig_pin, *echo_pin;
 
 int main(int argc, char *argv[]){
-	if(argc == 1)
-		filename = "sensor_data.txt";
-	else if(argc > 1)
-		filename = argv[1];
 
-	param.sched_priority = sched_get_priority_max(SCHED_RR);
-	if(sched_setscheduler(0, SCHED_RR, &param) != 0){
-		printf("sched_setscheduler error");
-		exit(EXIT_FAILURE);
-	}
-	int pin3, pin2;  
-	pin3 = setupGPIO("3","out", 1);  
-	pin2 = setupGPIO("2","in", 0);
-	close(pin2);
-	pulse_out(pin3, 10);
-	pulse_in(pin2);
-	close(pin3);
-	return 0;
+	  if(argc == 1){
+        trig_pin = "48";
+        echo_pin = "49";
+    } else if(argc == 2){
+        trig_pin = argv[1];
+        echo_pin = "49";
+    } else{
+        trig_pin = argv[1];
+        echo_pin = argv[2];
+    }
+    //printf("trig = %s echo = %s\n", trig_pin, echo_pin);
+
+	  param.sched_priority = sched_get_priority_max(SCHED_RR);
+	  if(sched_setscheduler(0, SCHED_RR, &param) != 0){
+	  	  printf("sched_setscheduler error");
+	  	  exit(EXIT_FAILURE);
+	  }
+	  int trig, echo;  
+	  trig = setupGPIO(trig_pin,"out", 1);  
+	  echo = setupGPIO(echo_pin,"in", 0);
+	  close(echo);
+	  pulse_out(trig, 10);
+	  pulse_in(echo, echo_pin);
+	  close(trig);
+	  return 0;
 }
 
 
@@ -170,23 +179,29 @@ void pulse_out(int fd, long microseconds){
     }  
 }  
 
-int pulse_in(int fd){
+int pulse_in(int fd, char *pin){
 	int value = 0;
 	int start = 0,  end = 0;
 	char ch;
 	long cycles = 0;
-	struct timeval s_time, e_time;
+	struct timeval s_time, e_time, run_start, temp_time;
+
 	char buffer[100];
+  sprintf(buffer, "/sys/class/gpio/gpio%s/value", pin);
     if (fd == -1) {  
     	printf("Error: pulseOut called with bad fd\n");  
     	exit(1);  
     }  
 
+    gettimeofday(&run_start, NULL);
+    //printf("time start = %d\n", run_start.tv_usec);
     while(!end){
+     // printf("loooooop\n");
 
-		fd = open("/sys/class/gpio/gpio2/value", O_RDONLY);
+
+		fd = open(buffer, O_RDONLY);
 		if (fd < 0) {
-			perror("gpio/get-value");
+			printf("gpio/get-value");
 			return fd;
 		}
 	
@@ -204,8 +219,20 @@ int pulse_in(int fd){
 			gettimeofday(&e_time, NULL);
 			end = 1;
 		}
+     gettimeofday(&temp_time, NULL);
+    // printf("cur time = %d\n", temp_time.tv_usec);
+    //printf("start = %d end = %d\n", start, end);
+
+      if(!start && (temp_time.tv_usec - run_start.tv_usec > TIMEOUT)){
+        end = 1;
+      //  printf("TIMEOUT IN LOOP");
+      } 
     }
-    printf("%f\n\0", (float)(e_time.tv_usec - s_time.tv_usec)/58.0);
+    if(start && end)
+        printf("%f\n\0", (float)(e_time.tv_usec - s_time.tv_usec)/58.0);
+    else{
+        printf("-1\n\0");
+    }
   /*  FILE *output_file = NULL;
     output_file = fopen(filename, "w");
     sprintf(buffer, "%f\n\0", (float)(e_time.tv_usec - s_time.tv_usec)/58.0);

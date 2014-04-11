@@ -1,5 +1,8 @@
 #remove all temp files
 rm *.class
+rm *.o
+rm s_gpio
+rm sonar_gpio.c~
 rm error.txt
 rm LaserSensorInterface.java~
 rm SensorManager.java~

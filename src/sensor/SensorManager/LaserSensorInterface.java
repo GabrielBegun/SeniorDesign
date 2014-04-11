@@ -1,11 +1,7 @@
-package sensor.SensorManager;
-
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import java.util.TooManyListenersException;
 import java.io.*;
-
-import util.UartDriver2;
 
 public class LaserSensorInterface{
 	private UartDriver2 uart;
@@ -18,6 +14,10 @@ public class LaserSensorInterface{
 		uart = new UartDriver2(UART_PORT_NAME);
 		uart.initialize();
 		uart.serialPort.addEventListener(new LaserSerialPortEventListner());
+	}
+
+	public void init(){
+		theBoss = SensorManager.getInstance();
 	}
 
 	private void sendRangeCommand() throws IOException{
