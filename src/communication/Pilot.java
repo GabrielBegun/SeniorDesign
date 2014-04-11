@@ -11,13 +11,14 @@ import java.util.LinkedList;
 import java.util.TooManyListenersException;
 import java.io.*;
 
+import defaults.Param;
 import Logger.Logger;
 import util.UartDriver;
 
 public class Pilot{
 	private static Pilot myPilot;
 	private Pilot() throws TooManyListenersException { 
-		uartArduPilot = new UartDriver("/dev/ttyO1"); 
+		uartArduPilot = new UartDriver(Param.UARTPILOT); 
 		uartArduPilot.initialize();
 		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws, fails if initialize fails
 		logger = Logger.getInstance();
@@ -51,8 +52,8 @@ public class Pilot{
        while(messageQueue.size() > 0){
     	   temp = messageQueue.poll();
     	   uartArduPilot.output.write(temp.getBytes());
-    	   logger.write("Pilot out:"+temp);
-    	   xBeeInterface.write("Pilot out:"+temp);
+    	   //logger.write("PilotOut:"+temp);
+    	   xBeeInterface.write("PilotOut:"+temp);
        }
     return;
   }
@@ -97,8 +98,8 @@ public class Pilot{
 			  try {
 				  String str = uartArduPilot.input.readLine();
 				  parseCommand(str);
-				  logger.write("Pilot in: "+str);
-				  xBeeInterface.write("Pilot in: "+str);
+				  //logger.write("PilotIn: "+str);
+				  xBeeInterface.write("PilotIn: "+str);
 			  } catch (Exception e) {
 				  System.err.println(e.toString());
 			  }

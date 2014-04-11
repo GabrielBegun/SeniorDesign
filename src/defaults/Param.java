@@ -23,4 +23,10 @@ public class Param {
 	 public static final int consistencyCount = 10;
 	 public static String positive = "1";
 	 public static String negative = "0";
+	 
+	 // UART
+	 public static String UARTPILOT = "/dev/ttyO1";
+	 public static String UARTLASER = "/dev/ttyO2";
+	 public static String UARTXBEE = "/dev/ttyO4";
+	 public static String UARTIRCAM = "/dev/ttyO5";
 }

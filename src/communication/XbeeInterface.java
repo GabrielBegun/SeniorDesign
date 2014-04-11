@@ -8,9 +8,11 @@ import gnu.io.SerialPortEventListener;
 //import java.util.Queue;
 //import java.util.LinkedList;
 
+
 import java.util.TooManyListenersException;
 import java.io.*;
 
+import defaults.Param;
 import FireScout.FireScout;
 import util.UartDriver;
 
@@ -31,7 +33,7 @@ public class XbeeInterface {
 	}
 
 	public void init() throws TooManyListenersException{
-		uartXbee = new UartDriver("/dev/ttyO4");
+		uartXbee = new UartDriver(Param.UARTXBEE);
 		uartXbee.initialize();
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		fireScout = FireScout.getInstance();

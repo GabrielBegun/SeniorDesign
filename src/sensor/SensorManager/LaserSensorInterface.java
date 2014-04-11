@@ -6,16 +6,16 @@ import gnu.io.SerialPortEventListener;
 import java.util.TooManyListenersException;
 import java.io.*;
 
+import defaults.Param;
 import util.UartDriver;
 
 public class LaserSensorInterface{
 	private UartDriver uart;
-	private String UART_PORT_NAME = "/dev/ttyO2";
 	private SensorManager theBoss;
 	private int ID;
 
 	public LaserSensorInterface() throws TooManyListenersException{
-		uart = new UartDriver(UART_PORT_NAME);
+		uart = new UartDriver(Param.UARTLASER);
 		uart.initialize();
 		uart.serialPort.addEventListener(new LaserSerialPortEventListner());
 	}
