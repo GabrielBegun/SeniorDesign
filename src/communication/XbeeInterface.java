@@ -20,11 +20,13 @@ public class XbeeInterface {
 
 	private UartDriver uartXbee;
 	private FireScout fireScout;
+	private Logger logger;
 
 	private static XbeeInterface myXbee;
 
 	private XbeeInterface() {
 	}
+
 
 	public static XbeeInterface getInstance() {
 		if (myXbee == null)
@@ -37,6 +39,7 @@ public class XbeeInterface {
 		uartXbee.initialize();
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		fireScout = FireScout.getInstance();
+		logger = Logger.getInstance();
 	}
 	
 	public void write(String str) throws IOException {
@@ -51,7 +54,7 @@ public class XbeeInterface {
 				try {
 					String str = uartXbee.input.readLine();
 					fireScout.parseCommand(str);
-					// Logger
+					logger.writeStandard("XbeeInterface: Received "+str);
 				} catch (Exception e) {
 					System.err.println(e.toString()); // TODO
 				}

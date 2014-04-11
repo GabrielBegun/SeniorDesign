@@ -13,7 +13,7 @@ import util.UartDriver;
 
 public class IRCamera {
 	private UartDriver uartRPI;
-	// private Logger logger;
+	private Logger logger;
 
 	private static IRCamera myIRCamera;
 
@@ -30,6 +30,7 @@ public class IRCamera {
 		uartRPI = new UartDriver(Param.UARTIRCAM);
 		uartRPI.initialize();
 		uartRPI.serialPort.addEventListener(new IRCameraSerialPortEventListener()); // Throws
+		logger = Logger.getInstance();
 	}
 	
 	private int matchCounter = 0;
@@ -43,6 +44,7 @@ public class IRCamera {
 						matchCounter++;
 						if(matchCounter == Param.consistencyCount){
 							// Call function TODO
+							logger.writeStandard("IRCamera: Person detected");
 							matchCounter = 0;
 						}
 					} else if(str.equals(Param.negative)){

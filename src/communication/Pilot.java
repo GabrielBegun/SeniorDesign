@@ -52,7 +52,7 @@ public class Pilot{
        while(messageQueue.size() > 0){
     	   temp = messageQueue.poll();
     	   uartArduPilot.output.write(temp.getBytes());
-    	   //logger.write("PilotOut:"+temp);
+    	   logger.writeStandard("PilotOut: "+temp);
     	   xBeeInterface.write("PilotOut:"+temp);
        }
     return;
@@ -98,7 +98,7 @@ public class Pilot{
 			  try {
 				  String str = uartArduPilot.input.readLine();
 				  parseCommand(str);
-				  //logger.write("PilotIn: "+str);
+				  logger.writeStandard("PilotIn: "+str);
 				  xBeeInterface.write("PilotIn: "+str);
 			  } catch (Exception e) {
 				  System.err.println(e.toString());

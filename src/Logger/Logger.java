@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 import defaults.Param;
 
@@ -38,21 +39,42 @@ public class Logger {
 		}
 
 	}
-
-	public void write(String str) {
+	
+	public void writeStandard(String msg) {
+		Date date = new Date();	
 		try {
-			bw.write(str + "\n");
+			bw.write("[S]" + date.toString() + " " + msg + "\n");
 			bw.flush();
 		} catch (IOException e) {
 			System.out.println("Error writing to file");
 		}
 	}
 	
-	/* Main for testing
+	public void writeWarning(String msg) {
+		Date date = new Date();	
+		try {
+			bw.write("[W]" + date.toString() + " " + msg + "\n");
+			bw.flush();
+		} catch (IOException e) {
+			System.out.println("Error writing to file");
+		}
+	}
+	
+	public void writeError(String msg) {
+		Date date = new Date();	
+		try {
+			bw.write("[E]" + date.toString() + " " + msg + "\n");
+			bw.flush();
+		} catch (IOException e) {
+			System.out.println("Error writing to file");
+		}
+	}
+	
+	/* Main for testing 
 	public static void main (String[] args){
 		Logger logger = Logger.getInstance();
 		logger.init();
-		logger.write("HEY THERE BUDDY!");
+		logger.writeError("HEY THERE BUDDY!");
 	}
 	*/
 }
