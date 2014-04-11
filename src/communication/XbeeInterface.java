@@ -21,27 +21,22 @@ public class XbeeInterface {
 
 	private static XbeeInterface myXbee;
 
-	private XbeeInterface() throws TooManyListenersException {
-		uartXbee = new UartDriver("/dev/ttyO4");
-		uartXbee.initialize();
-		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
-		// TooManyListenersException.
-		// This
-		// is
-		// a
-		// nested
-		// child
-		// class
-		// examples
-		fireScout = FireScout.getInstance();
+	private XbeeInterface() {
 	}
 
-	public static XbeeInterface getInstance() throws TooManyListenersException {
+	public static XbeeInterface getInstance() {
 		if (myXbee == null)
 			myXbee = new XbeeInterface();
 		return myXbee;
 	}
 
+	public void init() throws TooManyListenersException{
+		uartXbee = new UartDriver("/dev/ttyO4");
+		uartXbee.initialize();
+		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
+		fireScout = FireScout.getInstance();
+	}
+	
 	public void write(String str) throws IOException {
 		uartXbee.output.write(str.getBytes());
 		return;

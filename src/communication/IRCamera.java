@@ -5,6 +5,7 @@ import gnu.io.SerialPortEventListener;
 
 import java.util.TooManyListenersException;
 
+import defaults.Param;
 import util.UartDriver;
 
 /* This class interfaces with the RPI, which is connected to the DRS thermal camera and is running HOG
@@ -16,30 +17,37 @@ public class IRCamera {
 
 	private static IRCamera myIRCamera;
 
-	private IRCamera() throws TooManyListenersException {
-		uartRPI = new UartDriver("/dev/ttyO5");
-		uartRPI.initialize();
-		uartRPI.serialPort
-		.addEventListener(new IRCameraSerialPortEventListener()); // Throws
+	private IRCamera() {
 	}
-
-	public static IRCamera getInstance() throws TooManyListenersException {
+	
+	public static IRCamera getInstance() {
 		if (myIRCamera == null)
 			myIRCamera = new IRCamera();
 		return myIRCamera;
 	}
 
+	public void init() throws TooManyListenersException{
+		uartRPI = new UartDriver("/dev/ttyO5");
+		uartRPI.initialize();
+		uartRPI.serialPort.addEventListener(new IRCameraSerialPortEventListener()); // Throws
+	}
+	
+	private int matchCounter = 0;
 	private class IRCameraSerialPortEventListener implements
 	SerialPortEventListener {
 		public synchronized void serialEvent(SerialPortEvent oEvent) {
 			if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 				try {
 					String str = uartRPI.input.readLine();
-					// TODO
-					// logger.write(Timestamp+": IRCamer, Receive: " + str);
-					// Check if positive, then call the appropiate function. It
-					// may be a good idea to only call the function if we detect
-					// something X times in a row
+					if(str.equals(Param.positive)) {
+						matchCounter++;
+						if(matchCounter == Param.consistencyCount){
+							// Call function TODO
+							matchCounter = 0;
+						}
+					} else if(str.equals(Param.negative)){
+						matchCounter = (matchCounter>1) ? matchCounter-1 : 0;
+					}
 				} catch (Exception e) {
 					System.err.println(e.toString()); // TODO
 				}

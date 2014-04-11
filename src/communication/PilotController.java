@@ -127,6 +127,7 @@ public class PilotController implements Runnable {
 }
  
  	public void takeoffLand(){
+ 		System.out.println("PilotController called takeoffLand!");
  		// TODO
  	}
  	

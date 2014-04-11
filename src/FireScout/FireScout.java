@@ -4,6 +4,7 @@ import java.util.TooManyListenersException;
 
 import Logger.Logger;
 import sensor.SensorManager.SensorManager;
+import communication.IRCamera;
 import communication.PilotController;
 import communication.XbeeInterface;
 
@@ -27,7 +28,7 @@ public class FireScout {
 	}
 
 	private  static FireScout myQuadcopter;
-	private XbeeInterface xbeeInterface;
+	
 
 	private static State currState = State.DISARM;
 	private static State nextState = State.DISARM;
@@ -35,18 +36,24 @@ public class FireScout {
 	private Logger logger;
 	private PilotController pilotController;
 	private SensorManager sensorManager;
+	private IRCamera irCamera;
+	private XbeeInterface xbeeInterface;
 
 	void init(){
 		// Creates all instances of the lower classes 
 		logger = Logger.getInstance();
 		pilotController = PilotController.getInstance();
 		sensorManager = SensorManager.getInstance();
+		irCamera = IRCamera.getInstance();
+		xbeeInterface = XbeeInterface.getInstance();
 		// Navigation? Quadcopter?
 
 		try {
 			logger.init();
 			pilotController.init();
 			sensorManager.init();
+			irCamera.init();
+			xbeeInterface.init();
 		} catch (TooManyListenersException e) {
 			e.printStackTrace();
 			// logg error
@@ -55,7 +62,7 @@ public class FireScout {
 
 	}
 
-	/***********
+/***********
  FSM
  0 = Disarm
  1 = Test 1
@@ -63,7 +70,7 @@ public class FireScout {
  3 = Test 2
  4 = Hover | Room | Hallway
  5 = Land
-	 ***********/
+***********/
 	public enum State{
 		DISARM,
 		TEST1,

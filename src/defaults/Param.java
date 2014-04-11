@@ -18,4 +18,9 @@ public class Param {
 	 public static final double kP_p = 0.1;
 	 public static final double kI_p = 0.02;
 	 public static final double kD_p = 0.005;
+	 
+	 // IRCamera
+	 public static final int consistencyCount = 10;
+	 public static String positive = "1";
+	 public static String negative = "0";
 }
