@@ -1,6 +1,6 @@
 # Compile the quadcopter source
 COMM_PACKAGE="src/communication/IRCamera.java src/communication/Pilot.java src/communication/PilotController.java src/communication/XbeeInterface.java"
-UTIL_PACKAGE="src/util/UartDriver2.java"
+UTIL_PACKAGE="src/util/UartDriver.java"
 LOGGER_PACKAGE="src/Logger/Logger.java"
 FIRESCOUT_PACKAGE="src/FireScout/FireScout.java"
 DEFAULTS_PACKAGE="src/defaults/Param.java"
