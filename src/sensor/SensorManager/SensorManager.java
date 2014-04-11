@@ -1,3 +1,5 @@
+package sensor.SensorManager;
+
 
 
 //TODO: sonar gpio pins fix & ports and stuff
@@ -41,7 +43,7 @@ public class SensorManager implements Runnable{
 		}
 	}
 
-	private void init(){
+	public void init(){
 		underling_laser.init();
 		for(int ii = 0; ii < underling_sonar_gpio.length; ii++)
 			underling_sonar_gpio[ii].init();

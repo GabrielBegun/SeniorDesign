@@ -12,17 +12,17 @@ import java.util.TooManyListenersException;
 import java.io.*;
 
 import FireScout.FireScout;
-import util.UartDriver2;
+import util.UartDriver;
 
 public class XbeeInterface {
 
-	private UartDriver2 uartXbee;
+	private UartDriver uartXbee;
 	private FireScout fireScout;
 
 	private static XbeeInterface myXbee;
 
 	private XbeeInterface() throws TooManyListenersException {
-		uartXbee = new UartDriver2("/dev/ttyO5");
+		uartXbee = new UartDriver("/dev/ttyO5");
 		uartXbee.initialize();
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		// TooManyListenersException.

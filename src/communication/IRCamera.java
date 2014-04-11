@@ -5,19 +5,19 @@ import gnu.io.SerialPortEventListener;
 
 import java.util.TooManyListenersException;
 
-import util.UartDriver2;
+import util.UartDriver;
 
 /* This class interfaces with the RPI, which is connected to the DRS thermal camera and is running HOG
  * One of the future plans is to add feature detection to go through doors. This feature is not implemented */
 
 public class IRCamera {
-	private UartDriver2 uartRPI;
+	private UartDriver uartRPI;
 	// private Logger logger;
 
 	private static IRCamera myIRCamera;
 
 	private IRCamera() throws TooManyListenersException {
-		uartRPI = new UartDriver2("/dev/ttyO6"); // fix port
+		uartRPI = new UartDriver("/dev/ttyO6"); // fix port
 		uartRPI.initialize();
 		uartRPI.serialPort
 		.addEventListener(new IRCameraSerialPortEventListener()); // Throws

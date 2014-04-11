@@ -1,3 +1,5 @@
+package sensor.SensorManager;
+
 import java.lang.Process;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

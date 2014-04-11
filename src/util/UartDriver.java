@@ -10,8 +10,8 @@ import gnu.io.SerialPort;
 import java.util.Enumeration;
 
 // When creating a UartDriver it is important to create a Listener for it. No default Listener is provided
-public class UartDriver2 {
-	public UartDriver2(String str){
+public class UartDriver {
+	public UartDriver(String str){
 		port_name = str;
 	}
 	

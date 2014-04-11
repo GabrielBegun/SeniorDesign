@@ -1,3 +1,5 @@
+package sensor.SensorManager;
+
 import java.io.*;
 
 public class SonarAnalogSensorInterface{
@@ -10,7 +12,7 @@ public class SonarAnalogSensorInterface{
 		theBoss = SensorManager.getInstance();
 	}
 
-	public double getRanging(){
+	public void getRanging(){
 		double rr = -1, rr1, rr2, rr3;
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(port));
