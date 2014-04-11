@@ -12,12 +12,12 @@ import java.util.TooManyListenersException;
 import java.io.*;
 
 import Logger.Logger;
-import util.UartDriver2;
+import util.UartDriver;
 
 public class Pilot{
 	private static Pilot myPilot;
 	private Pilot() throws TooManyListenersException { 
-		uartArduPilot = new UartDriver2("/dev/ttyO4"); 
+		uartArduPilot = new UartDriver("/dev/ttyO4"); 
 		uartArduPilot.initialize();
 		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws, fails if initialize fails
 		logger = Logger.getInstance();
@@ -28,7 +28,7 @@ public class Pilot{
     	return myPilot;
     }
     
-    private UartDriver2 uartArduPilot;
+    private UartDriver uartArduPilot;
     private Logger logger;
     private XbeeInterface xBeeInterface;
     private static Queue<String> messageQueue = new LinkedList<String>();
