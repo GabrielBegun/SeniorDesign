@@ -40,8 +40,7 @@ public class XbeeInterface {
 	}
 	
 	public void write(String str) throws IOException {
-		uartXbee.output.write(str.getBytes());
-		System.out.println("XBEE");
+		uartXbee.output.write((str + "\n").getBytes());
 		return;
 	}
 

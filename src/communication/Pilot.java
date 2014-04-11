@@ -100,7 +100,6 @@ public class Pilot{
 				  parseCommand(str);
 				  //logger.write("PilotIn: "+str);
 				  xBeeInterface.write("PilotIn: "+str);
-				  System.out.println("PilotIn: "+str);
 			  } catch (Exception e) {
 				  System.err.println(e.toString());
 			  }
