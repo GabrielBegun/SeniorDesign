@@ -15,6 +15,7 @@ import util.UartDriver;
 public class IRCamera {
 	private UartDriver uartRPI;
 	private Logger logger;
+	private XbeeInterface xbeeInterface;
 
 	private static IRCamera myIRCamera;
 
@@ -32,6 +33,7 @@ public class IRCamera {
 		uartRPI.initialize();
 		uartRPI.serialPort.addEventListener(new IRCameraSerialPortEventListener()); // Throws
 		logger = Logger.getInstance();
+		xbeeInterface = XbeeInterface.getInstance();
 	}
 	
 	private int matchCounter = 0;
@@ -43,13 +45,19 @@ public class IRCamera {
 					String str = uartRPI.input.readLine();
 					if(str.equals(Param.positive)) {
 						matchCounter++;
-						if(matchCounter == Param.consistencyCount){
+					//	if(matchCounter == Param.consistencyCount){
 							// Call function TODO
 							logger.writeStandard("IRCamera: Person detected");
+							System.out.println("IRCamera: Person detected");
+							xbeeInterface.write("IRCamera: Person detected");
 							matchCounter = 0;
-						}
+					//	}
 					} else if(str.equals(Param.negative)){
+						// NO NEED TO DO THIS
 						matchCounter = (matchCounter>1) ? matchCounter-1 : 0;
+						logger.writeStandard("IRCamera: Person NOT detected");
+						System.out.println("IRCamera: Person NOT detected");
+						xbeeInterface.write("IRCamera: Person NOT detected");
 					}
 				} catch (Exception e) {
 					System.err.println(e.toString()); // TODO
