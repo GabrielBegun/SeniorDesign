@@ -31,7 +31,7 @@ public class Param {
 	 public static String UARTIRCAM = "/dev/ttyO5";
 	 
 	 // Logger
-	 public static String LOGDIR = "previousLogs/";
+	 public static String LOGDIR = "../previousLogs/"; // in BBB, you are sitting inside bin/
 	 public static String FILEBASE = "log";
 	 public static String FILEEND = ".txt";
 		
