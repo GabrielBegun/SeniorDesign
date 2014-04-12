@@ -2,6 +2,8 @@ package communication;
 
 import java.io.IOException;
 import java.util.TooManyListenersException;
+
+import Logger.Logger;
 import defaults.Param;
 /* TODO
  * Receive data! (Pilot)
@@ -18,7 +20,7 @@ import defaults.Param;
 public class PilotController implements Runnable {
  private Pilot pilot;
  private volatile boolean shutdown = false;
-  
+ private Logger logger; 
  
  // PID variables
  // Throttle - Altitude
@@ -92,6 +94,7 @@ public class PilotController implements Runnable {
  
  public void init() throws TooManyListenersException{
 	 pilot = Pilot.getInstance(); 
+	 logger = Logger.getInstance();
 	  // Throttle
 	  desAlt = 0;
 	  prevThrottle = 0;

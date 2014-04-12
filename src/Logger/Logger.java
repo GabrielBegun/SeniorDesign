@@ -32,12 +32,12 @@ public class Logger {
 		try {
 			fw = new FileWriter(filename);
 			bw = new BufferedWriter(fw);
-
+			
 		} catch (IOException e) {
 
 			System.out.printf("ERROR: %s\n", e);
 		}
-
+		writeStandard("Logger: logger created");
 	}
 	
 	public void writeStandard(String msg) {
