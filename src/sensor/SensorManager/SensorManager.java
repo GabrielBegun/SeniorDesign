@@ -29,6 +29,7 @@ public class SensorManager implements Runnable{
 	public double[] ranges;		//most recent ranging data 0 = laser, 1-2 = analog sonar, 3-10 = gpio sonar. If this value is -1, then there was an error with the sensor
 
 	private final int[] GPIO_PINS = {48, 49, 60, 51, 7, 66, 69, 45, 23, 47, 27, 22, 67, 68, 44, 26, 46, 65};
+	private final int[] ANALOG_PINS = {1, 2, 3, 4, 5, 6, 0};
 
 	private SensorManager(){
 	}
@@ -39,7 +40,7 @@ public class SensorManager implements Runnable{
 			underling_laser.giveID(0);
 			underling_sonar_analog = new SonarAnalogSensorInterface[NUM_ANALOG_SENSORS];
 			for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++){
-				underling_sonar_analog[ii] = new SonarAnalogSensorInterface("/sys/devices/ocp.2/helper.14/AIN1");
+				underling_sonar_analog[ii] = new SonarAnalogSensorInterface(String.format("/sys/devices/ocp.2/helper.14/AIN%d", ANALOG_PINS[ii]);
 				underling_sonar_analog[ii].giveID(ii + NUM_LASER_SENSORS);
 			} 
 			underling_sonar_gpio = new SonarGPIOSensorInterface[NUM_GPIO_SENSORS];
