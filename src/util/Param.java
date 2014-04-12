@@ -21,18 +21,22 @@ public class Param {
 
 	// IRCamera
 	public static final int consistencyCount = 10;
-	public static String positive = "1";
-	public static String negative = "0";
+	public static final String positive = "1";
+	public static final String negative = "0";
 
 	// UART
-	public static String UARTPILOT = "/dev/ttyO1";
-	public static String UARTLASER = "/dev/ttyO2";
-	public static String UARTXBEE = "/dev/ttyO4";
-	public static String UARTIRCAM = "/dev/ttyO5";
+	public static final String UARTPILOT = "/dev/ttyO1";
+	public static final String UARTLASER = "/dev/ttyO2";
+	public static final String UARTXBEE = "/dev/ttyO4";
+	public static final String UARTIRCAM = "/dev/ttyO5";
 
 	// Logger
-	public static String LOGDIR = "../previousLogs/"; // in BBB, you are sitting inside bin/
-	public static String FILEBASE = "log";
-	public static String FILEEND = ".txt";
+	public static final String LOGDIR = "../previousLogs/"; // in BBB, you are sitting inside bin/
+	public static final String FILEBASE = "log";
+	public static final String FILEEND = ".txt";
 
+	//Sensor mananger
+	public static final boolean LASER_ACTIVE = true;
+	public static final boolean ANALOG_ACTIVE = true;
+	public static final boolean GPIO_ACTIVE = false;
 }

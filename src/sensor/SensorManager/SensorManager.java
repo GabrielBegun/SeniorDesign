@@ -1,6 +1,6 @@
 package sensor.SensorManager;
 
-
+import util.Param;
 
 //TODO: sonar gpio pins fix & ports and stuff
 
@@ -82,26 +82,28 @@ public class SensorManager implements Runnable{
 		while(true){
 			try{
 				if(laser_counter == LASER_TIMER){
-					//System.out.println("laser sense");
-					//underling_laser.getRanging();
+					if(Param.LASER_ACTIVE)
+						underling_laser.getRanging();
 					laser_counter = 0;
 				} else{
 					laser_counter++;
 				}
 
 				if(sonar_a_counter == SONAR_ANALOG_TIMER){
-					//System.out.println("analog sense");
-					for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++);
-						//underling_sonar_analog[ii].getRanging();
+					if(Param.ANALOG_ACTIVE){
+						for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++);
+							underling_sonar_analog[ii].getRanging();
+					}
 					sonar_a_counter = 0;
 				} else{
 					sonar_a_counter++;
 				}
 
 				if(sonar_g_counterA == SONAR_GPIO_TIMER){
-					//System.out.println("gpio sense a");
-					for(int ii = 0; ii < GPIOA.length; ii++){
-						underling_sonar_gpio[GPIOA[ii]].getRanging();
+					if(Param.GPIO_ACTIVE){
+						for(int ii = 0; ii < GPIOA.length; ii++){
+							underling_sonar_gpio[GPIOA[ii]].getRanging();
+						}
 					}
 					sonar_g_counterA = 0;
 				} else{
@@ -109,9 +111,10 @@ public class SensorManager implements Runnable{
 				}
 
 				if(sonar_g_counterB == SONAR_GPIO_TIMER){
-					//System.out.println("gpio sense b");
-					for(int ii = 0; ii < GPIOB.length; ii++){
-						underling_sonar_gpio[GPIOB[ii]].getRanging();
+					if(Param.GPIO_ACTIVE){
+						for(int ii = 0; ii < GPIOB.length; ii++){
+							underling_sonar_gpio[GPIOB[ii]].getRanging();
+						}
 					}
 					sonar_g_counterB = 0;
 				} else{
