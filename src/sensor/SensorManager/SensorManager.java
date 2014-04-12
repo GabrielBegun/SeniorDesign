@@ -73,7 +73,6 @@ public class SensorManager implements Runnable{
 	}
 
 	public void run(){
-		init();
 		int laser_counter = 0;
 		int sonar_a_counter = 0;
 		int sonar_g_counterA = 0;
