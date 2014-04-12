@@ -126,12 +126,12 @@ public class SensorManager implements Runnable{
 			}
 		}
 	}
-/*
+	/*
 	public static void main(String[] args){
 		//SensorManager sm = SensorManager.getInstance();
 		Thread t = new Thread(SensorManager.getInstance());
 		t.start();
 	}
-*/
+	 */
 
 }

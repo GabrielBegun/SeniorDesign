@@ -1,5 +1,6 @@
 package FireScout;
 
+import java.io.IOException;
 import java.util.TooManyListenersException;
 
 import Logger.Logger;
@@ -61,8 +62,8 @@ public class FireScout {
 		Thread pilotController_thread = new Thread(pilotController);
 		Thread sensorManager_thread = new Thread(sensorManager);
 		// navigation
-		pilotController_thread.run();
-		sensorManager_thread.run();
+		pilotController_thread.start();
+		sensorManager_thread.start();
 	}
 
 /***********
@@ -84,7 +85,7 @@ public class FireScout {
 	}
 
 	// Called by xBeeInterface when it receives data
-	public void parseCommand (String str) { 
+	public void parseXBeeCommand (String str) { 
 		if (str.equals("Start")) {
 			nextState = State.TEST1;
 			return;
@@ -112,13 +113,20 @@ public class FireScout {
 		}
 	}
 
-	private boolean test1(){
+	private boolean test1() throws IOException{
+		xbeeInterface.write("FireScout: Test 1 started");
+		logger.writeStandard("FireScout: Test 1 started");
 		// TODO
 		return true;
 	}
 
-	private boolean takeoff(){
-
+	private boolean takeoff() throws InterruptedException, IOException{
+		xbeeInterface.write("FireScout: takeoff 1 started");
+		logger.writeStandard("FireScout: takeoff 1 started");
+		pilotController.arm();
+		Thread.sleep(1000);
+		pilotController.setDesAlt(60);
+		Thread.sleep(5000);
 		// TODO
 		return true;
 	}
@@ -133,12 +141,19 @@ public class FireScout {
 		return true;
 	}
 
-	private boolean land(){
+	private boolean land() throws InterruptedException, IOException{
+		xbeeInterface.write("FireScout: land 1 started");
+		logger.writeStandard("FireScout: land 1 started");
+		pilotController.setDesAlt(10);
+		Thread.sleep(8000);
+		pilotController.disarm();
+		
 		// TODO
 		return true;
 	}
 
-	public static void main (String[] args){
+	// HANDLE Exceptions! Main SHOULD NOT THROW	 
+	public static void main (String[] args) throws IOException, InterruptedException{
 		FireScout fireScout = FireScout.getInstance();
 		fireScout.init();
 		while(true){

@@ -46,7 +46,7 @@ public class Pilot{
 	private int compass;
 
 	String temp;
-	private void sendMessage() throws IOException {
+	public void sendMessage() throws IOException {
 		uartArduPilot.output.write(String.format("s%02d\n",messageQueue.size()).getBytes()); 
 		//System.out.println(String.format("s%02d",messageQueue.size()));
 		while(messageQueue.size() > 0){
@@ -66,7 +66,7 @@ public class Pilot{
 	public void setArmed(int v){ messageQueue.add(String.format("a%04d\n",v)); }  
 	public void powerOff() throws IOException{
 		messageQueue.add("z0001");
-		sync();
+		sendMessage();
 		return;
 	}
 
@@ -79,12 +79,6 @@ public class Pilot{
 	public double getGyroZ() { return gyroZ; }
 	public int getBattery() { return battery; }
 	public int getCompass() { return compass; }
-
-	public void sync() throws IOException {
-		sendMessage();
-		//receiveMessage();
-		return;
-	}
 
 	public void parseCommand(String str){
 		//	  String delims = ",";

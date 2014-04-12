@@ -3,6 +3,7 @@ package communication;
 import java.io.IOException;
 import java.util.TooManyListenersException;
 
+import sensor.SensorManager.SensorManager;
 import util.Param;
 import Logger.Logger;
 
@@ -10,6 +11,7 @@ public class PilotController implements Runnable {
 	private Pilot pilot;
 	private volatile boolean shutdown = false;
 	private Logger logger; 
+	private SensorManager sensorManager;
 
 	// PID variables
 	// Throttle - Altitude
@@ -37,8 +39,12 @@ public class PilotController implements Runnable {
 	// Yaw - Uses compass data (?)
 	private double desAngle;
 
+	
+	
 	// PID loops
 	private void setThrottleWithAltitude(double current_altitude) {
+		if(desAlt == 0) return;
+		
 		// Calculate time since last read 
 		double currentTime = (double)System.currentTimeMillis();
 		double timeDiff = currentTime - prevTime_t;
@@ -80,6 +86,7 @@ public class PilotController implements Runnable {
 
 
 	private void sePitchWithDistance(double current_dist) {
+		if(desDist == 0) return;
 		// Calculate time since last read 
 		double currentTime = (double)System.currentTimeMillis();
 		double timeDiff = currentTime - prevTime_p;
@@ -127,6 +134,9 @@ public class PilotController implements Runnable {
 		// TODO
 	}
 
+	public void arm() { pilot.setArmed(1); }
+	public void disarm() { pilot.setArmed(0); }
+	
 	public void setDesAlt(double v) { desAlt = v; }
 	public void setDesDist(double v) {desDist = v; }
 	public void setDesDist_left(double v) { desDist_left = v; }
@@ -146,6 +156,8 @@ public class PilotController implements Runnable {
 	public void init() throws TooManyListenersException{
 		pilot = Pilot.getInstance(); 
 		logger = Logger.getInstance();
+		sensorManager = SensorManager.getInstance();
+		
 		// Throttle
 		desAlt = 0;
 		prevThrottle = 0;
@@ -168,14 +180,20 @@ public class PilotController implements Runnable {
 		prevTime_r = (double)System.currentTimeMillis();
 	}
 
+
+	
+	
+	
 	public void run() {
 		//System.out.println("HERE i AM!");
 		double current_altitude = 0;
 		while (!shutdown) {  
+			
 			try {
-				//current_altitude = SensorMonitor.getAltitude(); or something like this
-				setThrottleWithAltitude(current_altitude++); 
-				pilot.sync();
+				// TODO
+				current_altitude = sensorManager.ranges[1];
+				setThrottleWithAltitude(current_altitude); 
+				pilot.sendMessage();
 				Thread.sleep(333);          
 			} catch (InterruptedException e) {
 				// good practice

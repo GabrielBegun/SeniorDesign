@@ -56,7 +56,7 @@ public class XbeeInterface {
 			if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 				try {
 					String str = uartXbee.input.readLine();
-					fireScout.parseCommand(str);
+					fireScout.parseXBeeCommand(str);
 					logger.writeStandard("XbeeInterface: Received "+str);
 				} catch (Exception e) {
 					System.err.println(e.toString()); // TODO
