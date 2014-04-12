@@ -9,5 +9,3 @@ OUTPUT_FOLDER="bin"
 ERROR_FILE="error.txt"
 
 javac -d $OUTPUT_FOLDER -classpath $RXTX_JAR $LOGGER_PACKAGE $COMM_PACKAGE $UTIL_PACKAGE $FIRESCOUT_PACKAGE $SENSOR_PACKAGE 2> $ERROR_FILE
-
-gcc -o bin/sensor/SensorManager/s_gpio src/sensor/SensorManager/sonar_gpio.c

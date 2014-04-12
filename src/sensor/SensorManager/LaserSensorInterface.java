@@ -39,8 +39,8 @@ public class LaserSensorInterface{
 					else
 						theBoss.addRange(-1, ID);
 				} catch(Exception e){
-					System.out.println("Read exception occurred. str = " + str);
-					e.printStackTrace();
+					//System.out.println("Read exception occurred. str = " + str);
+					//e.printStackTrace();
 				}
 			} else{
 				System.out.println("Not a DATA_AVAILABLE event.");

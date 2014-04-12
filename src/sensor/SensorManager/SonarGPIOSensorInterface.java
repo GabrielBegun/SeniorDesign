@@ -33,8 +33,8 @@ public class SonarGPIOSensorInterface{
 			}
 			range = Double.parseDouble(s);
 		} catch(Exception e){
-			System.out.println("Exception occured. " + s);
-			e.printStackTrace();
+			//System.out.println("Exception occured. " + s);
+			//e.printStackTrace();
 		}
 		
 		theBoss.addRange(range, ID);

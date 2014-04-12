@@ -37,7 +37,7 @@ public class SonarAnalogSensorInterface{
 			rr3 /= 3.2;
 			rr = (rr1 + rr2 + rr3)/3.0;
 		} catch(IOException e){
-			System.out.println("Error. IOException with reading port");
+			//System.out.println("Error. IOException with reading port");
 		}
 
 		theBoss.addRange(rr, ID);
