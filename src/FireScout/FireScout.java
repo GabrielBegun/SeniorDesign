@@ -57,6 +57,9 @@ public class FireScout {
 			e.printStackTrace();
 			// logg error
 			// maybe fall through so program exists.
+		} catch (IOException e) { // from xbee init
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		Thread pilotController_thread = new Thread(pilotController);

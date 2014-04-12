@@ -11,6 +11,7 @@ import gnu.io.SerialPortEventListener;
 
 
 
+
 import java.util.TooManyListenersException;
 import java.io.*;
 
@@ -37,12 +38,13 @@ public class XbeeInterface {
 		return myXbee;
 	}
 
-	public void init() throws TooManyListenersException{
+	public void init() throws TooManyListenersException, IOException{
 		uartXbee = new UartDriver(Param.UARTXBEE);
 		uartXbee.initialize();
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		fireScout = FireScout.getInstance();
 		logger = Logger.getInstance();
+		this.write("XBeeInterface: Connection started");
 	}
 	
 	public synchronized void write(String str) throws IOException {
