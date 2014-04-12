@@ -91,7 +91,7 @@ public class SensorManager implements Runnable{
 
 				if(sonar_a_counter == SONAR_ANALOG_TIMER){
 					if(Param.ANALOG_ACTIVE){
-						for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++);
+						for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++)
 							underling_sonar_analog[ii].getRanging();
 					}
 					sonar_a_counter = 0;
