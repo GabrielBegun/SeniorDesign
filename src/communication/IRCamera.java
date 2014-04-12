@@ -6,7 +6,7 @@ import gnu.io.SerialPortEventListener;
 import java.util.TooManyListenersException;
 
 import Logger.Logger;
-import defaults.Param;
+import util.Param;
 import util.UartDriver;
 
 /* This class interfaces with the RPI, which is connected to the DRS thermal camera and is running HOG

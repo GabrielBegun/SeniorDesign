@@ -6,7 +6,7 @@ import gnu.io.SerialPortEventListener;
 import java.util.TooManyListenersException;
 import java.io.*;
 
-import defaults.Param;
+import util.Param;
 import util.UartDriver;
 
 public class LaserSensorInterface{

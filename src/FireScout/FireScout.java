@@ -19,7 +19,6 @@ import communication.XbeeInterface;
 
 public class FireScout {
 	private FireScout() { 
-
 	}
 
 	public static FireScout getInstance() {
@@ -27,17 +26,15 @@ public class FireScout {
 		return myQuadcopter;
 	}
 
-	private  static FireScout myQuadcopter;
-	
-
-	private static State currState = State.DISARM;
-	private static State nextState = State.DISARM;
-
+	private static FireScout myQuadcopter;
 	private Logger logger;
 	private PilotController pilotController;
 	private SensorManager sensorManager;
 	private IRCamera irCamera;
 	private XbeeInterface xbeeInterface;
+
+	private static State currState = State.DISARM;
+	private static State nextState = State.DISARM;
 
 	void init(){
 		// Creates all instances of the lower classes 
@@ -46,7 +43,7 @@ public class FireScout {
 		sensorManager = SensorManager.getInstance();
 		irCamera = IRCamera.getInstance();
 		xbeeInterface = XbeeInterface.getInstance();
-		// Navigation? Quadcopter?
+		// Navigation? 
 
 		try {
 			logger.init();
@@ -54,12 +51,18 @@ public class FireScout {
 			sensorManager.init();
 			irCamera.init();
 			xbeeInterface.init();
+			// navigation
 		} catch (TooManyListenersException e) {
 			e.printStackTrace();
 			// logg error
 			// maybe fall through so program exists.
 		}
-
+		
+		Thread pilotController_thread = new Thread(pilotController);
+		Thread sensorManager_thread = new Thread(sensorManager);
+		// navigation
+		pilotController_thread.run();
+		sensorManager_thread.run();
 	}
 
 /***********

@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import defaults.Param;
+import util.Param;
 
 public class Logger {
 	private static Logger myLogger;

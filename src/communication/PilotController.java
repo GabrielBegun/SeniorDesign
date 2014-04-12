@@ -3,19 +3,8 @@ package communication;
 import java.io.IOException;
 import java.util.TooManyListenersException;
 
+import util.Param;
 import Logger.Logger;
-import defaults.Param;
-/* TODO
- * Receive data! (Pilot)
- * Tune Throttle PID
- * Pitch:
- *   int or double?
- *   normal PID?
- * Roll
- * Yaw (based on compass?)
- * Takeoff
- * Land
- */
  
 public class PilotController implements Runnable {
  private Pilot pilot;
