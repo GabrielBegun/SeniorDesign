@@ -24,18 +24,22 @@ public class Logger {
 	private static BufferedWriter bw;
 
 	public void init() {
-
-		File dir = new File(Param.LOGDIR);
-		File files[] = dir.listFiles();
-		String filename = Param.LOGDIR + Param.FILEBASE + files.length +  Param.FILEEND;
-		
 		try {
+			File dir = new File(Param.LOGDIR);
+			File files[] = dir.listFiles();
+			String filename;
+			if(files != null) 
+				filename = Param.LOGDIR + Param.FILEBASE + files.length +  Param.FILEEND;
+			else 
+				filename = "Error_log.txt";
+		
+		
 			fw = new FileWriter(filename);
 			bw = new BufferedWriter(fw);
 			
 		} catch (IOException e) {
-
 			System.out.printf("ERROR: %s\n", e);
+		
 		}
 		writeStandard("Logger: logger created");
 	}

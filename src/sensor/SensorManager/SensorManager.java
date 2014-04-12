@@ -40,7 +40,7 @@ public class SensorManager implements Runnable{
 			underling_laser.giveID(0);
 			underling_sonar_analog = new SonarAnalogSensorInterface[NUM_ANALOG_SENSORS];
 			for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++){
-				underling_sonar_analog[ii] = new SonarAnalogSensorInterface(String.format("/sys/devices/ocp.2/helper.14/AIN%d", ANALOG_PINS[ii]);
+				underling_sonar_analog[ii] = new SonarAnalogSensorInterface(String.format("/sys/devices/ocp.2/helper.14/AIN%d", ANALOG_PINS[ii]));
 				underling_sonar_analog[ii].giveID(ii + NUM_LASER_SENSORS);
 			} 
 			underling_sonar_gpio = new SonarGPIOSensorInterface[NUM_GPIO_SENSORS];
