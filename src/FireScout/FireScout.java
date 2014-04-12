@@ -126,7 +126,7 @@ public class FireScout {
 		pilotController.arm();
 		Thread.sleep(1000);
 		pilotController.setDesAlt(60);
-		Thread.sleep(5000);
+		Thread.sleep(8000);
 		// TODO
 		return true;
 	}
