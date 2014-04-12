@@ -45,7 +45,7 @@ public class XbeeInterface {
 		logger = Logger.getInstance();
 	}
 	
-	public void write(String str) throws IOException {
+	public synchronized void write(String str) throws IOException {
 		uartXbee.output.write((str + "\n").getBytes());
 		return;
 	}

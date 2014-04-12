@@ -44,7 +44,7 @@ public class Logger {
 		writeStandard("Logger: logger created");
 	}
 	
-	public void writeStandard(String msg) {
+	public synchronized void writeStandard(String msg) {
 		Date date = new Date();	
 		try {
 			bw.write("[S]" + date.toString() + " " + msg + "\n");
@@ -54,7 +54,7 @@ public class Logger {
 		}
 	}
 	
-	public void writeWarning(String msg) {
+	public synchronized void writeWarning(String msg) {
 		Date date = new Date();	
 		try {
 			bw.write("[W]" + date.toString() + " " + msg + "\n");
@@ -64,7 +64,7 @@ public class Logger {
 		}
 	}
 	
-	public void writeError(String msg) {
+	public synchronized void writeError(String msg) {
 		Date date = new Date();	
 		try {
 			bw.write("[E]" + date.toString() + " " + msg + "\n");
