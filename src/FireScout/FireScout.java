@@ -1,5 +1,5 @@
 package FireScout;
-import java.io.IOException;
+
 import java.util.TooManyListenersException;
 
 import Logger.Logger;
