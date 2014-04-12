@@ -28,9 +28,7 @@ public class SonarGPIOSensorInterface{
 		try{
 			Process p = Runtime.getRuntime().exec("./" + C_CALL_NAME + " " + trig_pin + " " + echo_pin);
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			//while((s = stdInput.readLine()) == null);
 			while((s = stdInput.readLine()) != null){
-				//System.out.println(s);
 				break;
 			}
 			range = Double.parseDouble(s);

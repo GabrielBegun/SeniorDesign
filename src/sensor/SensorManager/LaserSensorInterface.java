@@ -49,7 +49,6 @@ public class LaserSensorInterface{
 	}
 
 	public void getRanging(){
-		if(theBoss == null) theBoss = SensorManager.getInstance();
 		try{
 			sendRangeCommand();
 		} catch(Exception e){
