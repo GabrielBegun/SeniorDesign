@@ -9,6 +9,9 @@ public class SonarAnalogSensorInterface{
 
 	public SonarAnalogSensorInterface(String port){
 		this.port = port;
+	}
+
+	public void init(){
 		theBoss = SensorManager.getInstance();
 	}
 

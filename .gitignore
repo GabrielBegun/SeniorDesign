@@ -2,7 +2,9 @@
 ## Eclipse
 #################
 
-#.class
+.metadata/
+.metdata\
+*.class
 *.pydevproject
 tmp/
 *.tmp
