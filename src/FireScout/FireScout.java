@@ -136,7 +136,9 @@ public class FireScout {
 		return true;
 	}
 
-	private boolean navigation(){
+	private boolean navigation() throws IOException{
+		xbeeInterface.write("FireScout: navigation 1 started");
+		logger.writeStandard("FireScout: navigation 1 started");
 		// TODO
 		return true;
 	}
@@ -179,8 +181,9 @@ public class FireScout {
 				break;
 
 			case NAVIGATION:
-				if (fireScout.navigation()) nextState = State.LAND;
-				else nextState = State.LAND;
+				fireScout.navigation();
+				//if (fireScout.navigation()) nextState = State.LAND;
+				//else nextState = State.LAND;
 				break;
 
 			case LAND:
