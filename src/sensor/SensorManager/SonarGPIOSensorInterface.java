@@ -2,6 +2,7 @@ package sensor.SensorManager;
 
 import java.lang.Process;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.Exception;
 
@@ -37,7 +38,7 @@ public class SonarGPIOSensorInterface{
 				break;
 			}
 			range = Double.parseDouble(s);
-		} catch(Exception e){
+		} catch(IOException e){
 			log.writeError(String.format("SensorGPIOSensorInterface::getRanging error - Sensor with ID %d\n",ID));
 			range = -1;
 			//System.out.println("Exception occured. " + s);
