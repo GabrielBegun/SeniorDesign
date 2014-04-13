@@ -59,7 +59,7 @@ public class XbeeInterface {
 				try {
 					String str = uartXbee.input.readLine();
 					fireScout.parseXBeeCommand(str);
-					logger.writeStandard("XbeeInterface: Received "+str);
+					logger.writeStandard("XbeeInterface: Received aka, updated! "+str);
 				} catch (Exception e) {
 					System.err.println(e.toString()); // TODO
 				}
