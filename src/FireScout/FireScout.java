@@ -128,8 +128,9 @@ public class FireScout {
 		logger.writeStandard("FireScout: takeoff 1 started");
 		pilotController.arm();
 		Thread.sleep(1000);
+		pilotController.setDesAlt(1000);
+		Thread.sleep(8000); // Get throttle to around 300
 		pilotController.setDesAlt(60);
-		Thread.sleep(8000);
 		// TODO
 		return true;
 	}
@@ -151,8 +152,9 @@ public class FireScout {
 		logger.writeStandard("FireScout: land 1 started");
 		pilotController.setDesAlt(10);
 		Thread.sleep(8000);
-		pilotController.disarm();
 		pilotController.setDesAlt(0);
+		pilotController.disarm();
+		
 		
 		// TODO
 		return true;
