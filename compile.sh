@@ -11,6 +11,8 @@ RXTX_JAR="lib/RXTXcomm.jar"
 OUTPUT_FOLDER="/home/root/SeniorDesign/bin"
 ERROR_FILE="/home/root/logs/compilation_errors.txt"
 
+echo `pwd` >> ERROR_FILE
+
 /home/root/java/jdk1.7.0_51/bin/javac -d $OUTPUT_FOLDER -classpath $RXTX_JAR $LOGGER_PACKAGE $COMM_PACKAGE $UTIL_PACKAGE $FIRESCOUT_PACKAGE $SENSOR_PACKAGE 2>> $ERROR_FILE
 
 gcc -o bin/sensor/SensorManager/s_gpio src/sensor/SensorManager/sonar_gpio.c
