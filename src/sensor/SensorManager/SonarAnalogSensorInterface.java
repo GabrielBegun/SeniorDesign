@@ -1,11 +1,13 @@
 package sensor.SensorManager;
 
 import java.io.*;
+import Logger.Logger;
 
 public class SonarAnalogSensorInterface{
 	String port;
 	private int ID;
 	private SensorManager theBoss;
+	private Logger log;
 
 	public SonarAnalogSensorInterface(String port){
 		this.port = port;
@@ -13,6 +15,7 @@ public class SonarAnalogSensorInterface{
 
 	public void init(){
 		theBoss = SensorManager.getInstance();
+		log = Logger.getInstance();
 	}
 
 	public void getRanging(){
@@ -37,7 +40,12 @@ public class SonarAnalogSensorInterface{
 			rr3 /= 3.2;
 			rr = (rr1 + rr2 + rr3)/3.0;
 		} catch(IOException e){
+			log.writeError(String.format("SensorAnalogSensorInterface::getRanging IO error - Sensor with ID %d\n",ID));
+			range = -1;
 			//System.out.println("Error. IOException with reading port");
+		} catch (Exception e){
+			log.writeError(String.format("SensorAnalogSensorInterface::getRanging unknown error - Sensor with ID %d\n",ID));
+			range = -1;
 		}
 
 		theBoss.addRange(rr, ID);

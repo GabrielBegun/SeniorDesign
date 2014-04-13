@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.Exception;
 
+import Logger.Logger;
+
 
 
 public class SonarGPIOSensorInterface{
@@ -12,6 +14,7 @@ public class SonarGPIOSensorInterface{
 	private int ID;
 	private SensorManager theBoss;
 	private int trig_pin, echo_pin;
+	private Logger log;
 
 	public SonarGPIOSensorInterface(int trig_pin, int echo_pin){
 		this.trig_pin = trig_pin;
@@ -20,6 +23,8 @@ public class SonarGPIOSensorInterface{
 
 	public void init(){
 		theBoss = SensorManager.getInstance();
+		log = Logger.getInstance();
+		log.writeStandard(String.format("Sensor with ID %d initialized\n",ID));
 	}
 
 	public void getRanging(){
@@ -33,6 +38,8 @@ public class SonarGPIOSensorInterface{
 			}
 			range = Double.parseDouble(s);
 		} catch(Exception e){
+			log.writeError(String.format("SensorGPIOSensorInterface::getRanging error - Sensor with ID %d\n",ID));
+			range = -1;
 			//System.out.println("Exception occured. " + s);
 			//e.printStackTrace();
 		}

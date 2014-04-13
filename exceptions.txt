@@ -1,0 +1,5 @@
+SonarGPIOSensorInterface - GetRanging(Exception):
+	Logging: "SensorGPIOSensorInterface::getRanging error - Sensor with ID %d\n",ID
+	Result: set range to -1
+
+
