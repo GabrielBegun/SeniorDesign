@@ -44,17 +44,15 @@ public class Pilot{
 	private int battery;
 	private int compass;
 
-	String temp;
 	public void sendMessage() {
 		try {
-			uartArduPilot.output.write(String.format("s%02d\n",messageQueue.size()).getBytes());
-			//System.out.println(String.format("s%02d",messageQueue.size()));
+			String message = String.format("s%02d\n",messageQueue.size());
 			while(messageQueue.size() > 0){
-				temp = messageQueue.poll();
-				uartArduPilot.output.write(temp.getBytes());
-				logger.writeStandard("PilotOut: "+temp);
-				xBeeInterface.write("PilotOut:"+temp);
+				message += messageQueue.poll();
 			}
+			uartArduPilot.output.write(message.getBytes());
+			logger.writeStandard("PilotOut: "+message);
+			xBeeInterface.write("PilotOut:"+message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
