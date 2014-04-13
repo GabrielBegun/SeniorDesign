@@ -5,6 +5,7 @@ import java.util.TooManyListenersException;
 
 import sensor.SensorManager.SensorManager;
 import util.Param;
+import util.UartDriver.UartFailException;
 import Logger.Logger;
 
 public class PilotController implements Runnable {
@@ -80,13 +81,10 @@ public class PilotController implements Runnable {
 		pilot.setThrottle(newThrottle);
 		//System.out.println("newThrottle" +  newThrottle);
 		
-		try {
-			xbeeInterface.write("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
-			logger.writeDebug("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+		xbeeInterface.write("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
+		logger.writeDebug("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
+		
 
 		prevThrottle = newThrottle;
 		prevErrorAlt_t = errorAlt; 
@@ -161,7 +159,7 @@ public class PilotController implements Runnable {
 		return myPilotController;
 	}
 
-	public void init() throws TooManyListenersException{
+	public void init() throws TooManyListenersException, UartFailException{
 		pilot = Pilot.getInstance(); 
 		logger = Logger.getInstance();
 		sensorManager = SensorManager.getInstance();
@@ -205,11 +203,11 @@ public class PilotController implements Runnable {
 				pilot.sendMessage();
 				Thread.sleep(200);          
 			} catch (InterruptedException e) {
-				// good practice
 				Thread.currentThread().interrupt();
-				return;
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				e.printStackTrace();
+				logger.writeError("PilotController: InterruptedException. Exit");
+				xbeeInterface.write("PilotController: InterruptedException. Exit");
+				System.exit(0);
 			}
 		}  
 	}
@@ -231,6 +229,7 @@ public class PilotController implements Runnable {
 			  Thread.sleep(3000);
 			  u.shutdownConroller();
 		  } catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
 			  e.printStackTrace();
 		  }
 		  System.out.println("DONE");

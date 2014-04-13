@@ -1,8 +1,6 @@
 package communication;
 
-//package communication;
-//import java.io.IOException;
-//import java.util.ArrayList;
+
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
@@ -14,17 +12,18 @@ import java.io.*;
 import Logger.Logger;
 import util.Param;
 import util.UartDriver;
+import util.UartDriver.UartFailException;
 
 public class Pilot{
 	private static Pilot myPilot;
-	private Pilot() throws TooManyListenersException { 
+	private Pilot() throws TooManyListenersException, UartFailException { 
 		uartArduPilot = new UartDriver(Param.UARTPILOT); 
 		uartArduPilot.initialize();
 		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws, fails if initialize fails
 		logger = Logger.getInstance();
 		xBeeInterface = XbeeInterface.getInstance();
 	}
-	public static Pilot getInstance() throws TooManyListenersException{
+	public static Pilot getInstance() throws TooManyListenersException, UartFailException{
 		if(myPilot == null) myPilot = new Pilot();
 		return myPilot;
 	}
@@ -46,15 +45,19 @@ public class Pilot{
 	private int compass;
 
 	String temp;
-	public void sendMessage() throws IOException {
-		uartArduPilot.output.write(String.format("s%02d\n",messageQueue.size()).getBytes()); 
-		//System.out.println(String.format("s%02d",messageQueue.size()));
-		while(messageQueue.size() > 0){
-			temp = messageQueue.poll();
-			uartArduPilot.output.write(temp.getBytes());
-			logger.writeStandard("PilotOut: "+temp);
-			xBeeInterface.write("PilotOut:"+temp);
-		}
+	public void sendMessage() {
+		try {
+			uartArduPilot.output.write(String.format("s%02d\n",messageQueue.size()).getBytes());
+			//System.out.println(String.format("s%02d",messageQueue.size()));
+			while(messageQueue.size() > 0){
+				temp = messageQueue.poll();
+				uartArduPilot.output.write(temp.getBytes());
+				logger.writeStandard("PilotOut: "+temp);
+				xBeeInterface.write("PilotOut:"+temp);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 		return;
 	}
 
@@ -64,7 +67,7 @@ public class Pilot{
 	public void setRoll(int v){ messageQueue.add(String.format("r%04d\n",v)); }
 	public void setThrottle(int v){ messageQueue.add(String.format("t%04d\n",v)); }
 	public void setArmed(int v){ messageQueue.add(String.format("a%04d\n",v)); }  
-	public void powerOff() throws IOException{
+	public void powerOff() {
 		messageQueue.add("z0001");
 		sendMessage();
 		return;
@@ -89,13 +92,13 @@ public class Pilot{
 	private class PilotSerialPortEventListener implements SerialPortEventListener{
 		public synchronized void serialEvent(SerialPortEvent oEvent) {
 			if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-				try {
+				try{
 					String str = uartArduPilot.input.readLine();
 					parseCommand(str);
 					logger.writeStandard("PilotIn: "+str);
 					xBeeInterface.write("PilotIn: "+str);
-				} catch (Exception e) {
-					System.err.println(e.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			} else { // Ignore all the other eventTypes, but you should consider the other ones.
 				System.out.println("Serial Port Event not handled received");

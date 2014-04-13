@@ -12,6 +12,8 @@ import gnu.io.SerialPortEventListener;
 
 
 
+
+
 import java.util.TooManyListenersException;
 import java.io.*;
 
@@ -19,6 +21,7 @@ import FireScout.FireScout;
 import Logger.Logger;
 import util.Param;
 import util.UartDriver;
+import util.UartDriver.UartFailException;
 
 public class XbeeInterface {
 
@@ -38,7 +41,7 @@ public class XbeeInterface {
 		return myXbee;
 	}
 
-	public void init() throws TooManyListenersException, IOException{
+	public void init() throws TooManyListenersException, UartFailException {
 		uartXbee = new UartDriver(Param.UARTXBEE);
 		uartXbee.initialize();
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
@@ -47,8 +50,12 @@ public class XbeeInterface {
 		this.write("XBeeInterface: Connection started, JONAH IS POOP");
 	}
 	
-	public synchronized void write(String str) throws IOException {
-		uartXbee.output.write((str + "\n").getBytes());
+	public synchronized void write(String str) {
+		try{
+			uartXbee.output.write((str + "\n").getBytes());
+		} catch (IOException e) {
+			System.out.println("Error writing to xBee" + str);
+		}
 		return;
 	}
 
@@ -60,8 +67,8 @@ public class XbeeInterface {
 					String str = uartXbee.input.readLine();
 					fireScout.parseXBeeCommand(str);
 					logger.writeStandard("XbeeInterface: "+str);
-				} catch (Exception e) {
-					System.err.println(e.toString()); // TODO
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			} else { // Ignore all the other eventTypes, but you should consider
 				// the other ones.

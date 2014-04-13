@@ -8,13 +8,14 @@ import java.io.*;
 
 import util.Param;
 import util.UartDriver;
+import util.UartDriver.UartFailException;
 
 public class LaserSensorInterface{
 	private UartDriver uart;
 	private SensorManager theBoss;
 	private int ID;
 
-	public LaserSensorInterface() throws TooManyListenersException{
+	public LaserSensorInterface() throws TooManyListenersException, UartFailException{
 		uart = new UartDriver(Param.UARTLASER);
 		uart.initialize();
 		uart.serialPort.addEventListener(new LaserSerialPortEventListner());
@@ -38,22 +39,16 @@ public class LaserSensorInterface{
 						theBoss.addRange(Double.parseDouble(str), ID);
 					else
 						theBoss.addRange(-1, ID);
-				} catch(Exception e){
-					//System.out.println("Read exception occurred. str = " + str);
-					//e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			} else{
-				System.out.println("Not a DATA_AVAILABLE event.");
-			}
+				System.out.println("Serial Port Event not handled received");			}
 		}
 	}
 
-	public void getRanging(){
-		try{
-			sendRangeCommand();
-		} catch(Exception e){
-			System.out.println("");
-		}
+	public void getRanging() throws IOException{
+		sendRangeCommand();
 	}
 
 	public void giveID(int ID){

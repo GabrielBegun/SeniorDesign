@@ -50,7 +50,7 @@ public class Logger {
 			bw.write("[S]" + date.toString() + " " + msg + "\n");
 			bw.flush();
 		} catch (IOException e) {
-			System.out.println("Error writing to file");
+			System.out.println("Error writing to file" + msg);
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class Logger {
 			bw.write("[D]" + date.toString() + " " + msg + "\n");
 			bw.flush();
 		} catch (IOException e) {
-			System.out.println("Error writing to file");
+			System.out.println("Error writing to file" + msg);
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class Logger {
 			bw.write("[W]" + date.toString() + " " + msg + "\n");
 			bw.flush();
 		} catch (IOException e) {
-			System.out.println("Error writing to file");
+			System.out.println("Error writing to file" + msg);
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class Logger {
 			bw.write("[E]" + date.toString() + " " + msg + "\n");
 			bw.flush();
 		} catch (IOException e) {
-			System.out.println("Error writing to file");
+			System.out.println("Error writing to file" + msg);
 		}
 	}
 	

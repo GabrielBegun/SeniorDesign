@@ -1,10 +1,10 @@
 package FireScout;
 
-import java.io.IOException;
 import java.util.TooManyListenersException;
 
 import Logger.Logger;
 import sensor.SensorManager.SensorManager;
+import util.UartDriver.UartFailException;
 import communication.IRCamera;
 import communication.PilotController;
 import communication.XbeeInterface;
@@ -47,19 +47,23 @@ public class FireScout {
 		// Navigation? 
 
 		try {
+			xbeeInterface.init();
 			logger.init();
 			pilotController.init();
 			sensorManager.init();
 			irCamera.init();
-			xbeeInterface.init();
 			// navigation
 		} catch (TooManyListenersException e) {
 			e.printStackTrace();
-			// logg error
-			// maybe fall through so program exists.
-		} catch (IOException e) { // from xbee init
-			// TODO Auto-generated catch block
+			logger.writeError("FireScout: ToManyListenersException, quitting program");
+			xbeeInterface.write("FireScout: ToManyListenersException, quitting program");
+			System.exit(0);
+		} catch (UartFailException e) {
 			e.printStackTrace();
+			logger.writeError("FireScout: UartFailException, quitting program");
+			xbeeInterface.write("FireScout: UartFailException, quitting program");
+			e.printStackTrace();
+			System.exit(0);
 		}
 		
 		Thread pilotController_thread = new Thread(pilotController);
@@ -106,24 +110,20 @@ public class FireScout {
 			pilotController.takeoffLand();
 			return;
 		} else {
-			try{
-				xbeeInterface.write("Error parsing. " + str);
-			}
-			catch (Exception e) {
-				System.err.println(e.toString()); 
+			xbeeInterface.write("Error parsing. " + str);
 			}
 
-		}
+		
 	}
 
-	private boolean test1() throws IOException{
+	private boolean test1() {
 		xbeeInterface.write("FireScout: Test 1 started");
 		logger.writeStandard("FireScout: Test 1 started");
 		// TODO
 		return true;
 	}
 
-	private boolean takeoff() throws InterruptedException, IOException{
+	private boolean takeoff() throws InterruptedException {
 		xbeeInterface.write("FireScout: takeoff 1 started");
 		logger.writeStandard("FireScout: takeoff 1 started");
 		pilotController.arm();
@@ -140,14 +140,14 @@ public class FireScout {
 		return true;
 	}
 
-	private boolean navigation() throws IOException{
+	private boolean navigation() {
 		//xbeeInterface.write("FireScout: navigation 1 started");
 		//logger.writeStandard("FireScout: navigation 1 started");
 		// TODO
 		return true;
 	}
 
-	private boolean land() throws InterruptedException, IOException{
+	private boolean land() throws InterruptedException {
 		xbeeInterface.write("FireScout: land 1 started");
 		logger.writeStandard("FireScout: land 1 started");
 		pilotController.setDesAlt(10);
@@ -161,49 +161,57 @@ public class FireScout {
 	}
 
 	// HANDLE Exceptions! Main SHOULD NOT THROW	 
-	public static void main (String[] args) throws IOException, InterruptedException{
+	public static void main (String[] args) {
 		FireScout fireScout = FireScout.getInstance();
 		fireScout.init();
-		while(true){
-			switch (currState) {
-			case DISARM: 
-				// Stay here until xBee tells you to start;
-				// TODO
-				break;
-
-			case TEST1:
-				if (fireScout.test1()) nextState = State.TAKEOFF;
-				else nextState = State.DISARM;
-				break;
-
-			case TAKEOFF: 
-				if (fireScout.takeoff()) nextState = State.TEST2;
-				else nextState = State.LAND;
-				break;
-
-			case TEST2:
-				if (fireScout.test2()) nextState = State.NAVIGATION;
-				else nextState = State.LAND;
-				break;
-
-			case NAVIGATION:
-				fireScout.navigation();
-				//if (fireScout.navigation()) nextState = State.LAND;
-				//else nextState = State.LAND;
-				break;
-
-			case LAND:
-				fireScout.land();
-				nextState = State.DISARM;
-				// temp
-				return;
-				//break;
-
-			default:
-				nextState = State.LAND;
-				break;
+		try{
+			while(true){
+				switch (currState) {
+				case DISARM: 
+					// Stay here until xBee tells you to start;
+					// TODO
+					break;
+	
+				case TEST1:
+					if (fireScout.test1()) nextState = State.TAKEOFF;
+					else nextState = State.DISARM;
+					break;
+	
+				case TAKEOFF: 
+					if (fireScout.takeoff()) nextState = State.TEST2;
+					else nextState = State.LAND;
+					break;
+	
+				case TEST2:
+					if (fireScout.test2()) nextState = State.NAVIGATION;
+					else nextState = State.LAND;
+					break;
+	
+				case NAVIGATION:
+					fireScout.navigation();
+					//if (fireScout.navigation()) nextState = State.LAND;
+					//else nextState = State.LAND;
+					break;
+	
+				case LAND:
+					fireScout.land();
+					nextState = State.DISARM;
+					// temp
+					return;
+					//break;
+	
+				default:
+					nextState = State.LAND;
+					break;
+				}
+				currState = nextState;
 			}
-			currState = nextState;
+		} catch( InterruptedException e){
+			Thread.currentThread().interrupt();
+			e.printStackTrace();
+			Logger.getInstance().writeError("FireScout: InterruptedException. Exit");
+			XbeeInterface.getInstance().write("FireScout: InterruptedException. Exit");
+			System.exit(0);
 		}
 	}
 }

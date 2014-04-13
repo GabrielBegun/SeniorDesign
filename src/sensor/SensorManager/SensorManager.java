@@ -1,6 +1,13 @@
 package sensor.SensorManager;
 
+import java.io.IOException;
+import java.util.TooManyListenersException;
+
+import communication.XbeeInterface;
+
+import Logger.Logger;
 import util.Param;
+import util.UartDriver.UartFailException;
 
 //TODO: sonar gpio pins fix & ports and stuff
 
@@ -34,27 +41,24 @@ public class SensorManager implements Runnable{
 	private SensorManager(){
 	}
 
-	public void init(){
-		try{
-			underling_laser = new LaserSensorInterface();
-			underling_laser.giveID(0);
-			underling_sonar_analog = new SonarAnalogSensorInterface[NUM_ANALOG_SENSORS];
-			for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++){
-				underling_sonar_analog[ii] = new SonarAnalogSensorInterface(String.format("/sys/devices/ocp.2/helper.11/AIN%d", ANALOG_PINS[ii]));
-				underling_sonar_analog[ii].giveID(ii + NUM_LASER_SENSORS);
-			} 
-			underling_sonar_gpio = new SonarGPIOSensorInterface[NUM_GPIO_SENSORS];
-			for(int ii = 0; ii < NUM_GPIO_SENSORS; ii++){
-				underling_sonar_gpio[ii] = new SonarGPIOSensorInterface( GPIO_PINS[ii*2], GPIO_PINS[(ii*2)+1]);
-				underling_sonar_gpio[ii].giveID(ii + NUM_LASER_SENSORS + NUM_ANALOG_SENSORS);
-			}
-			sensorOrientation = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
-			sensorPosition = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
-			ranges = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
-		} catch(Exception e){
-			System.out.println("Error in Sensor Manager construction");
-			e.printStackTrace();
+	public void init() throws TooManyListenersException, UartFailException{
+
+		underling_laser = new LaserSensorInterface();
+		underling_laser.giveID(0);
+		underling_sonar_analog = new SonarAnalogSensorInterface[NUM_ANALOG_SENSORS];
+		for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++){
+			underling_sonar_analog[ii] = new SonarAnalogSensorInterface(String.format("/sys/devices/ocp.2/helper.11/AIN%d", ANALOG_PINS[ii]));
+			underling_sonar_analog[ii].giveID(ii + NUM_LASER_SENSORS);
+		} 
+		underling_sonar_gpio = new SonarGPIOSensorInterface[NUM_GPIO_SENSORS];
+		for(int ii = 0; ii < NUM_GPIO_SENSORS; ii++){
+			underling_sonar_gpio[ii] = new SonarGPIOSensorInterface( GPIO_PINS[ii*2], GPIO_PINS[(ii*2)+1]);
+			underling_sonar_gpio[ii].giveID(ii + NUM_LASER_SENSORS + NUM_ANALOG_SENSORS);
 		}
+		sensorOrientation = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
+		sensorPosition = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
+		ranges = new double[NUM_LASER_SENSORS + NUM_ANALOG_SENSORS + NUM_GPIO_SENSORS];
+
 		underling_laser.init();
 		for(int ii = 0; ii < underling_sonar_analog.length; ii++)
 			underling_sonar_analog[ii].init();
@@ -120,9 +124,16 @@ public class SensorManager implements Runnable{
 					sonar_g_counterB++;
 				}
 				Thread.sleep(DELAY);
-			} catch(Exception e){
+			} catch(IOException e){
 				System.out.println("Error in SensorManager run");
 				e.printStackTrace();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				e.printStackTrace();
+				Logger.getInstance().writeError("PilotController: InterruptedException. Exit");
+				XbeeInterface.getInstance().write("PilotController: InterruptedException. Exit");
+				System.exit(0);
+				
 			}
 		}
 	}
