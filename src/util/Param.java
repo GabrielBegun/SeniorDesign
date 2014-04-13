@@ -6,9 +6,9 @@ public class Param {
 	public static final int throttleMin = 130;
 	public static final int throttleDeltaMax = 5;
 	public static final double throttleScale = 1;
-	public static final double kP_t = 0.05;
+	public static final double kP_t = 0.08;
 	public static final double kI_t = 0.02;
-	public static final double kD_t = 0.01;
+	public static final double kD_t = 0.008;
 
 	// Pitch - Laser Range Finder
 	public static final int pitchMax = 20; //very high, will change

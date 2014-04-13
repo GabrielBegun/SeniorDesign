@@ -44,7 +44,7 @@ public class XbeeInterface {
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		fireScout = FireScout.getInstance();
 		logger = Logger.getInstance();
-		this.write("XBeeInterface: Connection started, aka, update worked");
+		this.write("XBeeInterface: Connection started, JONAH IS POOP");
 	}
 	
 	public synchronized void write(String str) throws IOException {
