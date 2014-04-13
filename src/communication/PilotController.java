@@ -1,6 +1,5 @@
 package communication;
 
-import java.io.IOException;
 import java.util.TooManyListenersException;
 
 import sensor.SensorManager.SensorManager;
@@ -201,7 +200,7 @@ public class PilotController implements Runnable {
 				current_altitude = sensorManager.ranges[1];
 				setThrottleWithAltitude(current_altitude); 
 				pilot.sendMessage();
-				Thread.sleep(200);          
+				Thread.sleep(800);          
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				e.printStackTrace();
