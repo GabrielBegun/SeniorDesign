@@ -200,7 +200,7 @@ public class PilotController implements Runnable {
 				current_altitude = sensorManager.ranges[1];
 				setThrottleWithAltitude(current_altitude); 
 				pilot.sendMessage();
-				Thread.sleep(800);          
+				Thread.sleep(300);          
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				e.printStackTrace();

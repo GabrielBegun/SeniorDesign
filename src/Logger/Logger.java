@@ -28,8 +28,8 @@ public class Logger {
 			File dir = new File(Param.LOGDIR);
 			File files[] = dir.listFiles();
 			String filename;
-			if(files != null) 
-				filename = Param.LOGDIR + Param.FILEBASE + files.length +  Param.FILEEND;
+			if(files != null) // usually, .gitignore is there
+				filename = Param.LOGDIR + Param.FILEBASE + String.format("%02d",files.length)  +  Param.FILEEND;
 			else 
 				filename = "Error_log.txt";
 		

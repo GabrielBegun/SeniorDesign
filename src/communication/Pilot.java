@@ -46,13 +46,14 @@ public class Pilot{
 
 	public void sendMessage() {
 		try {
-			String message = String.format("s%02d\n",messageQueue.size());
+			String message = String.format("s%02d ",messageQueue.size());
 			while(messageQueue.size() > 0){
 				message += messageQueue.poll();
 			}
+			message += "\n";
 			uartArduPilot.output.write(message.getBytes());
 			logger.writeStandard("PilotOut: "+message);
-			xBeeInterface.write("PilotOut:"+message);
+			xBeeInterface.write("PilotOut: "+message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -60,11 +61,11 @@ public class Pilot{
 	}
 
 
-	public void setPitch(int v){ messageQueue.add(String.format("p%04d\n",v)); }
-	public void setYaw(int v){ messageQueue.add(String.format("y%04d\n",v)); }
-	public void setRoll(int v){ messageQueue.add(String.format("r%04d\n",v)); }
-	public void setThrottle(int v){ messageQueue.add(String.format("t%04d\n",v)); }
-	public void setArmed(int v){ messageQueue.add(String.format("a%04d\n",v)); }  
+	public void setPitch(int v){ messageQueue.add(String.format("p%04d ",v)); }
+	public void setYaw(int v){ messageQueue.add(String.format("y%04d ",v)); }
+	public void setRoll(int v){ messageQueue.add(String.format("r%04d ",v)); }
+	public void setThrottle(int v){ messageQueue.add(String.format("t%04d ",v)); }
+	public void setArmed(int v){ messageQueue.add(String.format("a%04d ",v)); }  
 	public void powerOff() {
 		messageQueue.add("z0001");
 		sendMessage();

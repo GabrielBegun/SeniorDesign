@@ -43,10 +43,7 @@ public class SonarAnalogSensorInterface{
 			log.writeError(String.format("SensorAnalogSensorInterface::getRanging IO error - Sensor with ID %d\n",ID));
 			rr = -1;
 			//System.out.println("Error. IOException with reading port");
-		} catch (Exception e){
-			log.writeError(String.format("SensorAnalogSensorInterface::getRanging unknown error - Sensor with ID %d\n",ID));
-			rr = -1;
-		}
+		} 
 
 		theBoss.addRange(rr, ID);
 	}

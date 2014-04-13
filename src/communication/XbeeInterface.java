@@ -47,7 +47,7 @@ public class XbeeInterface {
 		uartXbee.serialPort.addEventListener(new xBeeSerialPortEventListener()); // Throws
 		fireScout = FireScout.getInstance();
 		logger = Logger.getInstance();
-		this.write("XBeeInterface: Connection started, JONAH IS POOP");
+		this.write("XBeeInterface: Connection started, WE BUILT THIS CITY!");
 	}
 	
 	public synchronized void write(String str) {
