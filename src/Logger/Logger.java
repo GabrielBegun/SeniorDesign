@@ -54,6 +54,16 @@ public class Logger {
 		}
 	}
 	
+	public synchronized void writeDebug(String msg) {
+		Date date = new Date();	
+		try {
+			bw.write("[D]" + date.toString() + " " + msg + "\n");
+			bw.flush();
+		} catch (IOException e) {
+			System.out.println("Error writing to file");
+		}
+	}
+	
 	public synchronized void writeWarning(String msg) {
 		Date date = new Date();	
 		try {

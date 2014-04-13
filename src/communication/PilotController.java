@@ -12,6 +12,7 @@ public class PilotController implements Runnable {
 	private volatile boolean shutdown = false;
 	private Logger logger; 
 	private SensorManager sensorManager;
+	private XbeeInterface xbeeInterface;
 
 	// PID variables
 	// Throttle - Altitude
@@ -78,14 +79,21 @@ public class PilotController implements Runnable {
 
 		pilot.setThrottle(newThrottle);
 		//System.out.println("newThrottle" +  newThrottle);
+		
+		try {
+			xbeeInterface.write("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
+			logger.writeDebug("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		prevThrottle = newThrottle;
 		prevErrorAlt_t = errorAlt; 
 		prevTime_t = currentTime;
 	}
 
-
-	private void sePitchWithDistance(double current_dist) {
+	private void setPitchWithLaser(double current_dist) {
 		if(desDist == 0) return;
 		// Calculate time since last read 
 		double currentTime = (double)System.currentTimeMillis();
@@ -157,6 +165,7 @@ public class PilotController implements Runnable {
 		pilot = Pilot.getInstance(); 
 		logger = Logger.getInstance();
 		sensorManager = SensorManager.getInstance();
+		xbeeInterface = XbeeInterface.getInstance();
 		
 		// Throttle
 		desAlt = 0;
@@ -194,7 +203,7 @@ public class PilotController implements Runnable {
 				current_altitude = sensorManager.ranges[1];
 				setThrottleWithAltitude(current_altitude); 
 				pilot.sendMessage();
-				Thread.sleep(333);          
+				Thread.sleep(200);          
 			} catch (InterruptedException e) {
 				// good practice
 				Thread.currentThread().interrupt();

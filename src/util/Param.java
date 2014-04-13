@@ -16,7 +16,7 @@ public class Param {
 	public static final int pitchDeltaMax = 10;
 	public static final double pitchScale = 1;
 	public static final double kP_p = 0.1;
-	public static final double kI_p = 0.02;
+	public static final double kI_p = 0.01;
 	public static final double kD_p = 0.005;
 
 	// IRCamera
