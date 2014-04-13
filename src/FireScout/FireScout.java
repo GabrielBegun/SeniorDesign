@@ -140,8 +140,8 @@ public class FireScout {
 	}
 
 	private boolean navigation() throws IOException{
-		xbeeInterface.write("FireScout: navigation 1 started");
-		logger.writeStandard("FireScout: navigation 1 started");
+		//xbeeInterface.write("FireScout: navigation 1 started");
+		//logger.writeStandard("FireScout: navigation 1 started");
 		// TODO
 		return true;
 	}
