@@ -129,8 +129,8 @@ public class FireScout {
 		pilotController.arm();
 		Thread.sleep(1000);
 		pilotController.setDesAlt(1000);
-		Thread.sleep(8000); // Get throttle to around 300
-		pilotController.setDesAlt(60);
+		Thread.sleep(10000); // Get throttle to around 300
+		pilotController.setDesAlt(35);
 		// TODO
 		return true;
 	}
@@ -151,7 +151,7 @@ public class FireScout {
 		xbeeInterface.write("FireScout: land 1 started");
 		logger.writeStandard("FireScout: land 1 started");
 		pilotController.setDesAlt(10);
-		Thread.sleep(8000);
+		Thread.sleep(10000);
 		pilotController.setDesAlt(0);
 		pilotController.disarm();
 		
