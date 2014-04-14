@@ -85,7 +85,7 @@ public class Pilot{
 	public void parseCommand(String str){
 		//	  String delims = ",";
 		//	  String messageTokens[] = str.split(delims);
-		// TODO
+		// 
 	}
 
 	private class PilotSerialPortEventListener implements SerialPortEventListener{
