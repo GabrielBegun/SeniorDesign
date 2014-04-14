@@ -21,6 +21,7 @@ if [ "$NUM" -lt 10 ]; 	then
 	NAME="log0"$NUM".txt"
 else
 	NAME="log"$NUM".txt"
+fi
 echo $NAME
 	
 ((VER++))
