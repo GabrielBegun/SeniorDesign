@@ -41,8 +41,10 @@ public class Pilot{
 	private double gyroX;
 	private double gyroY;
 	private double gyroZ;
+	private double compassX;
+	private double compassY;
+	private double compassZ;
 	private int battery;
-	private int compass;
 
 	public void sendMessage() {
 		try {
@@ -79,13 +81,35 @@ public class Pilot{
 	public double getGyroX() { return gyroX; }
 	public double getGyroY() { return gyroY; }
 	public double getGyroZ() { return gyroZ; }
+	public double getCompassX() { return compassX; }
+	public double getCompassY() { return compassY; }
+	public double getCompassZ() { return compassZ; }
 	public int getBattery() { return battery; }
-	public int getCompass() { return compass; }
 
 	public void parseCommand(String str){
-		//	  String delims = ",";
-		//	  String messageTokens[] = str.split(delims);
-		// 
+		if (str.length() < 10)
+			return;
+		else {
+			String dataArray[] = str.substring(9).split(",");
+			
+			switch (dataArray[0].substring(0, 1)) {
+				case "a" :
+					accX = Double.parseDouble(dataArray[0].substring(2));
+					accY = Double.parseDouble(dataArray[1].substring(2));
+					accZ = Double.parseDouble(dataArray[2].substring(2));
+					break;
+				case "g" :
+					getGyroX = Double.parseDouble(dataArray[0].substring(2));
+					getGyroY = Double.parseDouble(dataArray[1].substring(2));
+					getGyroZ = Double.parseDouble(dataArray[2].substring(2));
+					break;
+				case "c" :
+					compassX = Double.parseDouble(dataArray[0].substring(2));
+					compassY = Double.parseDouble(dataArray[1].substring(2));
+					compassZ = Double.parseDouble(dataArray[2].substring(2));
+					break;
+			}
+		}
 	}
 
 	private class PilotSerialPortEventListener implements SerialPortEventListener{
