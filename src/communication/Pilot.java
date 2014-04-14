@@ -35,6 +35,7 @@ public class Pilot{
 
 	// Variables read from ArduPilot
 	private boolean flyMode;
+	private boolean armMode;
 	private double accX;
 	private double accY;
 	private double accZ;
@@ -44,7 +45,9 @@ public class Pilot{
 	private double compassX;
 	private double compassY;
 	private double compassZ;
-	private int battery;
+	private double battery1;
+	private double battery2;
+	private double battery3;
 
 	public void sendMessage() {
 		try {
@@ -74,7 +77,8 @@ public class Pilot{
 		return;
 	}
 
-	public boolean getFyMode() { return flyMode; }
+	public boolean getFlyMode() { return flyMode; }
+	public boolean getArmMode() { return armMode; }
 	public double getAccX() { return accX; }
 	public double getAccY() { return accY; }
 	public double getAccZ() { return accZ; }
@@ -84,7 +88,9 @@ public class Pilot{
 	public double getCompassX() { return compassX; }
 	public double getCompassY() { return compassY; }
 	public double getCompassZ() { return compassZ; }
-	public int getBattery() { return battery; }
+	public double getBattery1() { return battery1; }
+	public double getBattery2() { return battery2; }
+	public double getBattery3() { return battery3; }
 
 	public void parseCommand(String str){
 		if (str.length() < 10)
@@ -99,15 +105,32 @@ public class Pilot{
 					accZ = Double.parseDouble(dataArray[2].substring(2));
 					break;
 				case "g" :
-					getGyroX = Double.parseDouble(dataArray[0].substring(2));
-					getGyroY = Double.parseDouble(dataArray[1].substring(2));
-					getGyroZ = Double.parseDouble(dataArray[2].substring(2));
+					gyroX = Double.parseDouble(dataArray[0].substring(2));
+					gyroY = Double.parseDouble(dataArray[1].substring(2));
+					gyroZ = Double.parseDouble(dataArray[2].substring(2));
 					break;
 				case "c" :
 					compassX = Double.parseDouble(dataArray[0].substring(2));
 					compassY = Double.parseDouble(dataArray[1].substring(2));
 					compassZ = Double.parseDouble(dataArray[2].substring(2));
 					break;
+				case "b" :
+					battery1 = Double.parseDouble(dataArray[0].substring(2));
+					battery2 = Double.parseDouble(dataArray[1].substring(2));
+					battery3 = Double.parseDouble(dataArray[2].substring(2));
+					break;
+				case "m" :
+					if (dataArray[0].substring(2) == "0")
+						flyMode = false;
+					else
+						flyModel = true;
+					
+					if (dataArray[1].substring(2) == "0")
+						armMode = false;
+					else
+						armMode = true;
+					break;
+					
 			}
 		}
 	}
