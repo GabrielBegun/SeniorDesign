@@ -7,9 +7,9 @@ public class Param {
 	public static final int loopDelay = 300;
 	
 	// Throttle - Altitude 
-	public static final int throttleMax = 500; //very high, will change
+	public static final int throttleMax = 450; //very high, will change
 	public static final int throttleMin = 130;
-	public static final int throttleDeltaMaxUP = 5;
+	public static final int throttleDeltaMaxUP = 7;
 	public static final int throttleDeltaMaxDOWN = -10;
 	public static final double throttleScale = 1;
 	public static double kP_t = 0.4;
