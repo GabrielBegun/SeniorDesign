@@ -215,12 +215,13 @@ public class PilotController implements Runnable {
 			Thread.sleep(Param.loopDelay);
 		}
 		prevThrottle = current_throttle;
+		this.setDesAlt(35);
 	}
 
 	private void land_run() throws InterruptedException{
 		int current_throttle = prevThrottle;
 		while(current_throttle > Param.throttleLand){
-			current_throttle -= Param.throttleDeltaMaxDOWN;
+			current_throttle += Param.throttleDeltaMaxDOWN;
 			pilot.setThrottle(current_throttle);
 			pilot.sendMessage();
 			Thread.sleep(Param.loopDelay);
