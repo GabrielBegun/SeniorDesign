@@ -12,9 +12,9 @@ public class Param {
 	public static final int throttleDeltaMaxUP = 5;
 	public static final int throttleDeltaMaxDOWN = -10;
 	public static final double throttleScale = 1;
-	public static final double kP_t = 0.4;
-	public static final double kI_t = 0.1;
-	public static final double kD_t = 0;
+	public static double kP_t = 0.4;
+	public static double kI_t = 0.1;
+	public static double kD_t = 0;
 
 	// Pitch - Laser Range Finder
 	public static final int pitchMax = 20; //very high, will change
@@ -22,10 +22,22 @@ public class Param {
 	public static final int pitchDeltaMaxUP = 5;
 	public static final int pitchDeltaMaxDOWN = -10;
 	public static final double pitchScale = 1;
-	public static final double kP_p = 0.1;
-	public static final double kI_p = 0.01;
-	public static final double kD_p = 0.005;
+	public static double kP_p = 0.1;
+	public static double kI_p = 0.01;
+	public static double kD_p = 0.005;
+	
+	// Roll - two side sensors
+	public static double kP_r = 0.1;
+	public static double kI_r = 0.01;
+	public static double kD_r = 0.005;
 
+	
+	// Yaw - compass
+	public static double kP_y = 0.1;
+	public static double kI_y = 0.01;
+	public static double kD_y = 0.005;
+
+	
 	// IRCamera
 	public static final int consistencyCount = 10;
 	public static final String positive = "1";
