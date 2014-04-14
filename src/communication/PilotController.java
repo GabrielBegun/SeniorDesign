@@ -143,7 +143,7 @@ public class PilotController implements Runnable {
 	public void disarm() { pilot.setArmed(0); }
 	
 	public void setDesAlt(double v) { desAlt = v; } // Inches
-	public void setDesDist(double v) {desDist = v; }
+	public void setDesDist(double v) {desDist = v; }	
 	public void setDesDist_left(double v) { desDist_left = v; }
 	public void setDesDist_right(double v) { desDist_right = v; }
 	public void setDesAngle(double v) { desAngle = v; }
