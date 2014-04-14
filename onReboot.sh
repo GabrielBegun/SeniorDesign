@@ -8,6 +8,7 @@ sleep 1
 echo 1 > /sys/class/gpio/gpio46/value
 BASE_DIRECTORY="/home/root/SeniorDesign"
 LOG_DIRECTORY="/home/root/logs"
+mkdir $BASE_DIRECTORY/bin
 printf "\n\n" >> $LOG_DIRECTORY/update_log.txt
 echo $(date) >> $LOG_DIRECTORY/update_log.txt
 printf "\n\n" >> $LOG_DIRECTORY/onRebootRun_log.txt
