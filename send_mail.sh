@@ -25,5 +25,6 @@ fi
 #echo $NAME
 python /home/root/logs/mail.py $VER $NAME
 	
+cd /home/root/logs
 ((VER++))
 echo $VER > version
