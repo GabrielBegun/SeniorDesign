@@ -22,7 +22,8 @@ if [ "$NUM" -lt 10 ]; 	then
 else
 	NAME="log"$NUM".txt"
 fi
-echo $NAME
+#echo $NAME
+python /home/root/logs/mail.py $VER $NAME
 	
 ((VER++))
 echo $VER > version
