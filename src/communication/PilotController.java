@@ -188,7 +188,7 @@ public class PilotController implements Runnable {
 	public void setDesAngle(double v) { desAngle = v; }
 	public void shutdownConroller() { shutdown = false; }
 
-
+	
 
 	private enum State {
 		TAKEOFF,
@@ -203,6 +203,7 @@ public class PilotController implements Runnable {
 	public void takeoff() { nextState = State.TAKEOFF; }
 	public void land() { nextState = State.LAND; }
 	public void takeoffLand(){ nextState = State.TAKEOFFLAND; }
+	public void emergencyStop() { pilot.powerOff(); }
 	private void takeoff_run() throws InterruptedException {
 		this.clearVariables();
 		this.arm();

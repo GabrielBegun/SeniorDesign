@@ -88,7 +88,7 @@ public class FireScout {
 		if (str.equals("Start")) {
 			nextState = State.TEST1;
 			return;
-		} else if (str.equals("Stop")) {
+		} else if (str.equals("Land")) {
 			nextState = State.LAND;
 			return;
 		} else if (str.equals("Test1")) {
@@ -100,8 +100,13 @@ public class FireScout {
 			return;
 		} else if (str.equals("TakeoffLand")) {
 			xbeeInterface.write("FireScout: Running TakeoffLand");
+			logger.writeDebug("FireScout: Running TakeoffLand");
 			pilotController.takeoffLand();
 			return;
+		} else if (str.contains("STOP")){
+			xbeeInterface.write("FireScout: STOP");
+			logger.writeError("FireScout: STOP");
+			pilotController.emergencyStop();
 		} else if (str.contains("TPID")) {
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_t = Double.parseDouble(tempArray[0]);
@@ -109,21 +114,35 @@ public class FireScout {
 			Param.kD_t = Double.parseDouble(tempArray[2]);
 			xbeeInterface.write("Reporting new values: " + Param.kP_t + " "
 					+ Param.kI_t + " " + Param.kD_t);
-		} else if (str.contains("PPID")) {
+			logger.writeDebug("Reporting new values: " + Param.kP_t + " "
+					+ Param.kI_t + " " + Param.kD_t);
+		} else if (str.contains("PPID")) {	
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_p = Double.parseDouble(tempArray[0]);
 			Param.kI_p = Double.parseDouble(tempArray[1]);
 			Param.kD_p = Double.parseDouble(tempArray[2]);
+			xbeeInterface.write("Reporting new values: " + Param.kP_p + " "
+					+ Param.kI_p + " " + Param.kD_p);
+			logger.writeDebug("Reporting new values: " + Param.kP_p + " "
+					+ Param.kI_p + " " + Param.kD_p);
 		} else if (str.contains("RPID")) {
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_r = Double.parseDouble(tempArray[0]);
 			Param.kI_r = Double.parseDouble(tempArray[1]);
 			Param.kD_r = Double.parseDouble(tempArray[2]);
+			xbeeInterface.write("Reporting new values: " + Param.kP_r + " "
+					+ Param.kI_r + " " + Param.kD_r);
+			logger.writeDebug("Reporting new values: " + Param.kP_r + " "
+					+ Param.kI_r + " " + Param.kD_r);
 		} else if (str.contains("YPID")) {
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_y = Double.parseDouble(tempArray[0]);
 			Param.kI_y = Double.parseDouble(tempArray[1]);
 			Param.kD_y = Double.parseDouble(tempArray[2]);
+			xbeeInterface.write("Reporting new values: " + Param.kP_y + " "
+					+ Param.kI_y + " " + Param.kD_y);
+			logger.writeDebug("Reporting new values: " + Param.kP_y + " "
+					+ Param.kI_y + " " + Param.kD_y);
 		} else {
 			xbeeInterface.write("Error parsing. " + str);
 		}
