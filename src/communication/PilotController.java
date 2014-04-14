@@ -239,6 +239,7 @@ public class PilotController implements Runnable {
 
 	public void run() {
 		double current_altitude = 0;
+		double current_lasetDist = 0;
 		while (!shutdown) {  
 			try {
 				switch (nextState){
@@ -258,6 +259,8 @@ public class PilotController implements Runnable {
 					// TODO
 					current_altitude = sensorManager.ranges[1];
 					setThrottleWithAltitude(current_altitude); 
+					current_lasetDist = sensorManager.ranges[0];
+					setPitchWithLaser(current_lasetDist);
 					pilot.sendMessage();
 					Thread.sleep(Param.loopDelay);  
 					break;

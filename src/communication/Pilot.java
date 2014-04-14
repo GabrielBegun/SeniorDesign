@@ -46,7 +46,7 @@ public class Pilot{
 
 	public void sendMessage() {
 		try {
-			String message = String.format("s%02d ",messageQueue.size());
+			String message = String.format("ss%02d ",messageQueue.size());
 			while(messageQueue.size() > 0){
 				message += messageQueue.poll();
 			}
