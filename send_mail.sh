@@ -3,6 +3,7 @@ cd /home/root/logs
 
 if [ ! -f version ]; then
 	echo 1 > version 
+fi
 VER=$(cat version)
 
 python mail.py $VER compilation_errors.txt
