@@ -82,7 +82,7 @@ public class FireScout {
  4 = Hover | Room | Hallway
  5 = Land
 ***********/
-	public enum State{
+	private enum State{
 		DISARM,
 		TEST1,
 		TAKEOFF,
@@ -107,6 +107,7 @@ public class FireScout {
 			//return to base (Navigation?)
 			return;
 		} else if (str.equals("TakeoffLand")) {
+			xbeeInterface.write("FireScout: Running TakeoffLand");
 			pilotController.takeoffLand();
 			return;
 		} else {
@@ -124,14 +125,9 @@ public class FireScout {
 	}
 
 	private boolean takeoff() throws InterruptedException {
-		xbeeInterface.write("FireScout: takeoff 1 started");
-		logger.writeStandard("FireScout: takeoff 1 started");
-		pilotController.arm();
-		Thread.sleep(1000);
-		pilotController.setDesAlt(1000);
-		Thread.sleep(10000); // Get throttle to around 300
-		pilotController.setDesAlt(35);
-		// TODO
+		xbeeInterface.write("FireScout: takeoff started");
+		logger.writeStandard("FireScout: takeoff started");
+		pilotController.takeoff();
 		return true;
 	}
 
@@ -148,14 +144,9 @@ public class FireScout {
 	}
 
 	private boolean land() throws InterruptedException {
-		xbeeInterface.write("FireScout: land 1 started");
-		logger.writeStandard("FireScout: land 1 started");
-		pilotController.setDesAlt(10);
-		Thread.sleep(10000);
-		pilotController.setDesAlt(0);
-		pilotController.disarm();
-		
-		
+		xbeeInterface.write("FireScout: land started");
+		logger.writeStandard("FireScout: land started");
+		pilotController.land();
 		// TODO
 		return true;
 	}

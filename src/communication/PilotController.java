@@ -29,7 +29,7 @@ public class PilotController implements Runnable {
 	private double errorIntegral_p; //errorIntegral starts at 0
 	private double prevTime_p;
 
-	// Roll - Side sensors... Must use both sides TODO
+	// Roll - Side sensors... Must use both sides
 	private double desDist_left;
 	private double desDist_right;
 	private int prevRoll;
@@ -40,12 +40,51 @@ public class PilotController implements Runnable {
 	// Yaw - Uses compass data (?)
 	private double desAngle;
 
-	
-	
+	// Private constructor
+	private static PilotController myPilotController;
+	private PilotController() { }
+
+	public static PilotController getInstance() {
+		if(myPilotController == null) myPilotController = new PilotController();
+		return myPilotController;
+	}
+
+	public void init() throws TooManyListenersException, UartFailException{
+		pilot = Pilot.getInstance(); 
+		logger = Logger.getInstance();
+		sensorManager = SensorManager.getInstance();
+		xbeeInterface = XbeeInterface.getInstance();
+
+		this.clearVariables();
+	}
+
+	private void clearVariables(){
+		// Throttle
+		desAlt = 0;
+		prevThrottle = 0;
+		prevErrorAlt_t = 0;
+		errorIntegral_t = 0.0f;
+		prevTime_t = (double)System.currentTimeMillis();
+
+		// Pitch
+		desDist = 0;
+		prevPitch = 0;
+		prevErrorAlt_p = 0;
+		errorIntegral_p = 0.0f;
+		prevTime_p = (double)System.currentTimeMillis();
+
+		desDist_left = 0;
+		desDist_right = 0;
+		prevRoll = 0;
+		prevErrorAlt_r = 0; 
+		errorIntegral_r = 0.0f; 
+		prevTime_r = (double)System.currentTimeMillis();
+	}
+
 	// PID loops
 	private void setThrottleWithAltitude(double current_altitude) {
 		if(desAlt == 0) return;
-		
+
 		// Calculate time since last read 
 		double currentTime = (double)System.currentTimeMillis();
 		double timeDiff = currentTime - prevTime_t;
@@ -66,8 +105,8 @@ public class PilotController implements Runnable {
 
 		double throttleChange = Param.throttleScale*(addPAlt+addIAlt+addDAlt);
 		//int throttleChange = (int)(Param.throttleScale * addPAlt); // Remove for full PID
-		if(throttleChange > Param.throttleDeltaMax) throttleChange = Param.throttleDeltaMax;
-		if(throttleChange < -Param.throttleDeltaMax) throttleChange = -Param.throttleDeltaMax;
+		if(throttleChange > Param.throttleDeltaMaxUP) throttleChange = Param.throttleDeltaMaxUP;
+		if(throttleChange < Param.throttleDeltaMaxDOWN) throttleChange = -Param.throttleDeltaMaxDOWN;
 		int newThrottle = prevThrottle + (int)throttleChange;
 
 		// Boundry check the new Throttle
@@ -79,11 +118,11 @@ public class PilotController implements Runnable {
 
 		pilot.setThrottle(newThrottle);
 		//System.out.println("newThrottle" +  newThrottle);
-		
-	
+
+
 		xbeeInterface.write("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
 		logger.writeDebug("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
-		
+
 
 		prevThrottle = newThrottle;
 		prevErrorAlt_t = errorAlt; 
@@ -112,8 +151,8 @@ public class PilotController implements Runnable {
 
 		double pitchChange = Param.pitchScale*(addPDist+addIDist+addDDist);
 		//int throttleChange = (int)(Param.throttleScale * addPAlt); // Remove for full PID
-		if(pitchChange > Param.pitchDeltaMax) pitchChange = Param.pitchDeltaMax;
-		if(pitchChange < -Param.pitchDeltaMax) pitchChange = -Param.pitchDeltaMax;
+		if(pitchChange > Param.pitchDeltaMaxUP) pitchChange = Param.pitchDeltaMaxUP;
+		if(pitchChange < Param.pitchDeltaMaxDOWN) pitchChange = -Param.pitchDeltaMaxDOWN;
 		int newPitch = prevPitch + (int)pitchChange;
 
 		// Boundry check the new Throttle
@@ -139,9 +178,9 @@ public class PilotController implements Runnable {
 		// TODO
 	}
 
-	public void arm() { pilot.setArmed(1); }
-	public void disarm() { pilot.setArmed(0); }
-	
+	private void arm() { pilot.setArmed(1); }
+	private void disarm() { pilot.setArmed(0); }
+
 	public void setDesAlt(double v) { desAlt = v; } // Inches
 	public void setDesDist(double v) {desDist = v; }	
 	public void setDesDist_left(double v) { desDist_left = v; }
@@ -149,58 +188,79 @@ public class PilotController implements Runnable {
 	public void setDesAngle(double v) { desAngle = v; }
 	public void shutdownConroller() { shutdown = false; }
 
-	// Private constructor
-	private static PilotController myPilotController;
-	private PilotController() { }
 
-	public static PilotController getInstance() {
-		if(myPilotController == null) myPilotController = new PilotController();
-		return myPilotController;
+
+	private enum State {
+		TAKEOFF,
+		PIDCONTROL,
+		LAND,
+		TAKEOFFLAND
 	}
 
-	public void init() throws TooManyListenersException, UartFailException{
-		pilot = Pilot.getInstance(); 
-		logger = Logger.getInstance();
-		sensorManager = SensorManager.getInstance();
-		xbeeInterface = XbeeInterface.getInstance();
-		
-		// Throttle
-		desAlt = 0;
-		prevThrottle = 0;
-		prevErrorAlt_t = 0;
-		errorIntegral_t = 0.0f;
-		prevTime_t = (double)System.currentTimeMillis();
+	private volatile static State nextState = State.PIDCONTROL;
 
-		// Pitch
-		desDist = 0;
-		prevPitch = 0;
-		prevErrorAlt_p = 0;
-		errorIntegral_p = 0.0f;
-		prevTime_p = (double)System.currentTimeMillis();
-
-		desDist_left = 0;
-		desDist_right = 0;
-		prevRoll = 0;
-		prevErrorAlt_r = 0; 
-		errorIntegral_r = 0.0f; 
-		prevTime_r = (double)System.currentTimeMillis();
+	// state control
+	public void takeoff() { nextState = State.TAKEOFF; }
+	public void land() { nextState = State.LAND; }
+	public void takeoffLand(){ nextState = State.TAKEOFFLAND; }
+	private void takeoff_run() throws InterruptedException {
+		this.clearVariables();
+		this.arm();
+		Thread.sleep(1000);
+		int current_throttle = Param.throttleMin;
+		while(current_throttle < Param.throttleHover) {
+			current_throttle += Param.throttleDeltaMaxUP;
+			pilot.setThrottle(current_throttle);
+			pilot.sendMessage();
+			Thread.sleep(Param.loopDelay);
+		}
+		prevThrottle = current_throttle;
 	}
 
+	private void land_run() throws InterruptedException{
+		int current_throttle = prevThrottle;
+		while(current_throttle > Param.throttleLand){
+			current_throttle -= Param.throttleDeltaMaxDOWN;
+			pilot.setThrottle(current_throttle);
+			pilot.sendMessage();
+			Thread.sleep(Param.loopDelay);
+		}
+		Thread.sleep(5000);
+		this.disarm();
+		this.clearVariables();
+	}
+	
+	private void takeoff_land_run() throws InterruptedException{
+		this.takeoff_run();
+		this.land_run();
+	}
 
-	
-	
-	
 	public void run() {
-		//System.out.println("HERE i AM!");
 		double current_altitude = 0;
 		while (!shutdown) {  
-			
 			try {
-				// TODO
-				current_altitude = sensorManager.ranges[1];
-				setThrottleWithAltitude(current_altitude); 
-				pilot.sendMessage();
-				Thread.sleep(300);          
+				switch (nextState){
+				case TAKEOFF:
+					this.takeoff_run();
+					nextState = State.PIDCONTROL;
+					break;
+				case LAND:
+					this.land_run();
+					nextState = State.PIDCONTROL;
+					break;
+				case TAKEOFFLAND:
+					takeoff_land_run();
+					nextState = State.PIDCONTROL;
+					break;
+				case PIDCONTROL:
+					// TODO
+					current_altitude = sensorManager.ranges[1];
+					setThrottleWithAltitude(current_altitude); 
+					pilot.sendMessage();
+					Thread.sleep(Param.loopDelay);  
+					break;
+				}
+
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				e.printStackTrace();
@@ -211,10 +271,7 @@ public class PilotController implements Runnable {
 		}  
 	}
 
-	public void takeoffLand(){
-		System.out.println("PilotController called takeoffLand!");
-		// TODO
-	}
+
 
 	/*
     public static void main(String[] args) {

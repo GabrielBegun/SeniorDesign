@@ -1,10 +1,16 @@
 package util;
 
 public class Param {
+	// Pilot Controller
+	public static final int throttleHover = 400;
+	public static final int throttleLand = 250;
+	public static final int loopDelay = 300;
+	
 	// Throttle - Altitude 
 	public static final int throttleMax = 500; //very high, will change
 	public static final int throttleMin = 130;
-	public static final int throttleDeltaMax = 5;
+	public static final int throttleDeltaMaxUP = 5;
+	public static final int throttleDeltaMaxDOWN = -10;
 	public static final double throttleScale = 1;
 	public static final double kP_t = 0.4;
 	public static final double kI_t = 0.1;
@@ -13,7 +19,8 @@ public class Param {
 	// Pitch - Laser Range Finder
 	public static final int pitchMax = 20; //very high, will change
 	public static final int pitchMin = -20;
-	public static final int pitchDeltaMax = 10;
+	public static final int pitchDeltaMaxUP = 5;
+	public static final int pitchDeltaMaxDOWN = -10;
 	public static final double pitchScale = 1;
 	public static final double kP_p = 0.1;
 	public static final double kI_p = 0.01;
