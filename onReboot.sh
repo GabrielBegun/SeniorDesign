@@ -1,5 +1,11 @@
 #script to run on reboot
+echo 46 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio46/direction
+echo 1 > /sys/class/gpio/gpio46/value
 sleep 10
+echo 0 > /sys/class/gpio/gpio46/value
+sleep 1
+echo 1 > /sys/class/gpio/gpio46/value
 BASE_DIRECTORY="/home/root/SeniorDesign"
 LOG_DIRECTORY="/home/root/logs"
 printf "\n\n" >> $LOG_DIRECTORY/update_log.txt
@@ -10,9 +16,6 @@ printf "\n\n" >> $LOG_DIRECTORY/compile_log.txt
 echo $(date) >> $LOG_DIRECTORY/compile_log.txt
 printf "\n\n" >> $LOG_DIRECTORY/run_log.txt
 echo $(date) >> $LOG_DIRECTORY/run_log.txt
-echo 46 > /sys/class/gpio/export
-echo out > /sys/class/gpio/gpio46/direction
-echo 1 > /sys/class/gpio/gpio46/value
 $BASE_DIRECTORY/update.sh &>> $LOG_DIRECTORY/update_log.txt
 echo "update" >> $LOG_DIRECTORY/onRebootRun_log.txt
 echo 65 > /sys/class/gpio/export
