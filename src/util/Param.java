@@ -47,7 +47,7 @@ public class Param {
 	// UART
 	public static final String UARTPILOT = "/dev/ttyO1"; // RX: 26 TX: 24 (9)
 	public static final String UARTLASER = "/dev/ttyO2"; // RX: 22 TX: 21 (9)
-	public static final String UARTXBEE = "/dev/ttyO4";  // RX: 11 RX: 13 (9)
+	public static final String UARTXBEE = "/dev/ttyO4";  // RX: 11 TX: 13 (9)
 	public static final String UARTIRCAM = "/dev/ttyO5"; // RX: 38 TX: 37 (8)
 
 	// Logger

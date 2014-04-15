@@ -221,7 +221,7 @@ public class PilotController implements Runnable {
 			Thread.sleep(Param.loopDelay);
 		}
 		prevThrottle = current_throttle;
-		this.setDesAltitude(35);
+		this.setDesAltitude(100);
 	}
 
 	private void land_run() throws InterruptedException{
