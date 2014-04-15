@@ -12,6 +12,7 @@ public class SonarAnalogSensorInterface{
 	private final double DIVISION_FACTOR = 5120;
 	private final double REFERENCE_VOLTAGE = 1.8;
 	private final double BITMAX_VALUE = 1024;
+	private final double MAGIC_FACTOR = 0.5;
 	private final double MM_TO_CM = 10;
 
 	private double ANALOG_TO_CM = 0;
@@ -26,6 +27,7 @@ public class SonarAnalogSensorInterface{
 		ANALOG_TO_CM = 1;
 		ANALOG_TO_CM *= REFERENCE_VOLTAGE;
 		ANALOG_TO_CM *= DIVISION_FACTOR;
+		ANALOG_TO_CM *= MAGIC_FACTOR;
 		ANALOG_TO_CM /= BITMAX_VALUE;
 		ANALOG_TO_CM /= VCC;
 		ANALOG_TO_CM /= MM_TO_CM;
