@@ -7,6 +7,8 @@ sleep 10
 BASE_DIRECTORY="/home/root/SeniorDesign"
 LOG_DIRECTORY="/home/root/logs"
 $BASE_DIRECTORY/send_mail.sh
+sleep 10
+
 mkdir $BASE_DIRECTORY/bin
 rm $LOG_DIRECTORY/*.txt
 printf "\n\n" >> $LOG_DIRECTORY/update_log.txt
