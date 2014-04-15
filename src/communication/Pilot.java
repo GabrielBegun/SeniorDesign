@@ -123,7 +123,7 @@ public class Pilot{
 					if (dataArray[0].substring(2) == "0")
 						flyMode = false;
 					else
-						flyModel = true;
+						flyMode = true;
 					
 					if (dataArray[1].substring(2) == "0")
 						armMode = false;
