@@ -103,7 +103,7 @@ public class FireScout {
 			logger.writeDebug("FireScout: Running TakeoffLand");
 			pilotController.takeoffLand();
 			return;
-		} else if (str.contains("STOP")){
+		} else if (str.equals("STOP")){
 			xbeeInterface.write("FireScout: STOP");
 			logger.writeError("FireScout: STOP");
 			pilotController.emergencyStop();
@@ -143,6 +143,21 @@ public class FireScout {
 					+ Param.kI_y + " " + Param.kD_y);
 			logger.writeDebug("Reporting new values: " + Param.kP_y + " "
 					+ Param.kI_y + " " + Param.kD_y);
+		} else if (str.contains("DAL")){
+			String tempArray[] = str.substring(4).split(",");
+			pilotController.setDesAltitude(Double.parseDouble(tempArray[0]));
+		} else if (str.contains("DDF")){
+			String tempArray[] = str.substring(4).split(",");
+			pilotController.setDesDistFront(Double.parseDouble(tempArray[0]));
+		} else if (str.contains("DDL")){
+			String tempArray[] = str.substring(4).split(",");
+			pilotController.setDesDistLeft(Double.parseDouble(tempArray[0]));
+		} else if (str.contains("DDR")){
+			String tempArray[] = str.substring(4).split(",");
+			pilotController.setDesDistRight(Double.parseDouble(tempArray[0]));
+		} else if (str.contains("DAN")){
+			String tempArray[] = str.substring(4).split(",");
+			pilotController.setDesAngle(Double.parseDouble(tempArray[0]));
 		} else {
 			xbeeInterface.write("Error parsing. " + str);
 		}

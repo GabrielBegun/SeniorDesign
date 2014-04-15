@@ -16,14 +16,14 @@ public class PilotController implements Runnable {
 
 	// PID variables
 	// Throttle - Altitude
-	private double desAlt;
+	private double desAltitude;
 	private int prevThrottle; //throttle starts at 0
 	private double prevErrorAlt_t; //set to zero for start
 	private double errorIntegral_t; //errorIntegral starts at 0
 	private double prevTime_t;
 
 	// Pitch - Laser Range Finder
-	private double desDist;
+	private double desDist_front;
 	private int prevPitch;
 	private double prevErrorAlt_p; //set to zero for start
 	private double errorIntegral_p; //errorIntegral starts at 0
@@ -60,14 +60,14 @@ public class PilotController implements Runnable {
 
 	private void clearVariables(){
 		// Throttle
-		desAlt = 0;
+		desAltitude = 0;
 		prevThrottle = 0;
 		prevErrorAlt_t = 0;
 		errorIntegral_t = 0.0f;
 		prevTime_t = (double)System.currentTimeMillis();
 
 		// Pitch
-		desDist = 0;
+		desDist_front = 0;
 		prevPitch = 0;
 		prevErrorAlt_p = 0;
 		errorIntegral_p = 0.0f;
@@ -83,14 +83,14 @@ public class PilotController implements Runnable {
 
 	// PID loops
 	private void setThrottleWithAltitude(double current_altitude) {
-		if(desAlt == 0) return;
+		if(desAltitude == 0) return;
 
 		// Calculate time since last read 
 		double currentTime = (double)System.currentTimeMillis();
 		double timeDiff = currentTime - prevTime_t;
 
 		//Calculate the error
-		double errorAlt = desAlt - current_altitude;
+		double errorAlt = desAltitude - current_altitude;
 
 		//Data collection for discrete time integration, limit data to 1000 entries
 		errorIntegral_t += timeDiff*((prevErrorAlt_t+errorAlt)/2.0) / 1000000; //add midpoint approximation to total error integral
@@ -120,8 +120,8 @@ public class PilotController implements Runnable {
 		//System.out.println("newThrottle" +  newThrottle);
 
 
-		xbeeInterface.write("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
-		logger.writeDebug("PilotControllerPID: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
+		xbeeInterface.write("PilotControllerPID_t: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
+		logger.writeDebug("PilotControllerPID_t: "+newThrottle + " " + current_altitude +  " "+ addPAlt + " " + addIAlt + " " + addDAlt);
 
 
 		prevThrottle = newThrottle;
@@ -130,13 +130,13 @@ public class PilotController implements Runnable {
 	}
 
 	private void setPitchWithLaser(double current_dist) {
-		if(desDist == 0) return;
+		if(desDist_front == 0) return;
 		// Calculate time since last read 
 		double currentTime = (double)System.currentTimeMillis();
 		double timeDiff = currentTime - prevTime_p;
 
 		//Calculate the error
-		double errorDist = desDist - current_dist;
+		double errorDist = desDist_front - current_dist;
 
 		//Data collection for discrete time integration, limit data to 1000 entries
 		errorIntegral_p += timeDiff*((prevErrorAlt_p+errorDist)/2.0) / 1000000; //add midpoint approximation to total error integral
@@ -175,21 +175,25 @@ public class PilotController implements Runnable {
 	}
 
 	private void setYawWithAngle(double current_angle){
-		// TODO
+		
 	}
 
 	private void arm() { pilot.setArmed(1); }
 	private void disarm() { pilot.setArmed(0); }
 
-	public void setDesAlt(double v) { desAlt = v; } // Inches
-	public void setDesDist(double v) {desDist = v; }	
-	public void setDesDist_left(double v) { desDist_left = v; }
-	public void setDesDist_right(double v) { desDist_right = v; }
+	public void setDesAltitude(double v) { desAltitude = v; } // Inches
+	public void setDesDistFront(double v) {desDist_front = v; }	
+	public void setDesDistLeft(double v) { desDist_left = v; }
+	public void setDesDistRight(double v) { desDist_right = v; }
 	public void setDesAngle(double v) { desAngle = v; }
 	public void shutdownConroller() { shutdown = false; }
 
 	
-
+	private void sendXBeeStatus(){
+		xbeeInterface.write("PilotController: Status "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
+		logger.writeStandard("PilotController: Status "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
+	}
+	
 	private enum State {
 		TAKEOFF,
 		PIDCONTROL,
@@ -204,6 +208,7 @@ public class PilotController implements Runnable {
 	public void land() { nextState = State.LAND; }
 	public void takeoffLand(){ nextState = State.TAKEOFFLAND; }
 	public void emergencyStop() { pilot.powerOff(); }
+	
 	private void takeoff_run() throws InterruptedException {
 		this.clearVariables();
 		this.arm();
@@ -216,7 +221,7 @@ public class PilotController implements Runnable {
 			Thread.sleep(Param.loopDelay);
 		}
 		prevThrottle = current_throttle;
-		this.setDesAlt(35);
+		this.setDesAltitude(35);
 	}
 
 	private void land_run() throws InterruptedException{
@@ -240,6 +245,7 @@ public class PilotController implements Runnable {
 	public void run() {
 		double current_altitude = 0;
 		double current_lasetDist = 0;
+		int status_update_count = 0;
 		while (!shutdown) {  
 			try {
 				switch (nextState){
@@ -256,6 +262,7 @@ public class PilotController implements Runnable {
 					nextState = State.PIDCONTROL;
 					break;
 				case PIDCONTROL:
+					if(status_update_count++ %30 == 0) sendXBeeStatus();
 					// TODO
 					current_altitude = sensorManager.ranges[1];
 					setThrottleWithAltitude(current_altitude); 
