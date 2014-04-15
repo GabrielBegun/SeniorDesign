@@ -5,6 +5,7 @@ public class Param {
 	public static final int throttleHover = 400;
 	public static final int throttleLand = 250;
 	public static final int loopDelay = 300;
+	public static final int statusUpdatedCountMod = 10;
 	
 	// Throttle - Altitude 
 	public static final int throttleMax = 450; //very high, will change

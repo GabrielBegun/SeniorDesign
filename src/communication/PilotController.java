@@ -262,7 +262,7 @@ public class PilotController implements Runnable {
 					nextState = State.PIDCONTROL;
 					break;
 				case PIDCONTROL:
-					if(status_update_count++ %30 == 0) sendXBeeStatus();
+					if(status_update_count++ %Param.statusUpdatedCountMod == 0) sendXBeeStatus();
 					// TODO
 					current_altitude = sensorManager.ranges[1];
 					setThrottleWithAltitude(current_altitude); 
