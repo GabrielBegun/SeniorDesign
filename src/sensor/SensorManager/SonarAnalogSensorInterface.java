@@ -8,6 +8,13 @@ public class SonarAnalogSensorInterface{
 	private int ID;
 	private SensorManager theBoss;
 	private Logger log;
+	private final double VCC = 3.3;
+	private final double DIVISION_FACTOR = 5120;
+	private final double REFERENCE_VOLTAGE = 1.8;
+	private final double BITMAX_VALUE = 1024;
+	private final double MM_TO_CM = 10;
+
+	private double ANALOG_TO_CM = 0;
 
 	public SonarAnalogSensorInterface(String port){
 		this.port = port;
@@ -16,6 +23,12 @@ public class SonarAnalogSensorInterface{
 	public void init(){
 		theBoss = SensorManager.getInstance();
 		log = Logger.getInstance();
+		ANALOG_TO_CM = 1;
+		ANALOG_TO_CM *= REFERENCE_VOLTAGE;
+		ANALOG_TO_CM *= DIVISION_FACTOR;
+		ANALOG_TO_CM /= BITMAX_VALUE;
+		ANALOG_TO_CM *= VCC;
+		ANALOG_TO_CM *= MM_TO_CM;
 	}
 
 	public void getRanging(){
@@ -25,20 +38,21 @@ public class SonarAnalogSensorInterface{
 			String range = br.readLine();
 			br.close();
 			rr1 = Double.parseDouble(range);
-			rr1 /= 3.2;
+			//rr1 /= 3.2;
 			try{Thread.sleep(30);} catch(Exception e){}
 			br = new BufferedReader(new FileReader(port));
 			range = br.readLine();
 			br.close();
 			rr2 = Double.parseDouble(range);
-			rr2 /= 3.2;
+			//rr2 /= 3.2;
 			try{Thread.sleep(30);} catch(Exception e){}
 			br = new BufferedReader(new FileReader(port));
 			range = br.readLine();
 			br.close();
 			rr3 = Double.parseDouble(range);
-			rr3 /= 3.2;
+			//rr3 /= 3.2;
 			rr = (rr1 + rr2 + rr3)/3.0;
+			rr *= ANALOG_TO_CM;
 		} catch(IOException e){
 			log.writeError(String.format("SensorAnalogSensorInterface::getRanging IO error - Sensor with ID %d\n",ID));
 			rr = -1;
