@@ -144,20 +144,15 @@ public class FireScout {
 			logger.writeDebug("Reporting new values: " + Param.kP_y + " "
 					+ Param.kI_y + " " + Param.kD_y);
 		} else if (str.contains("DAL")){
-			String tempArray[] = str.substring(4).split(",");
-			pilotController.setDesAltitude(Double.parseDouble(tempArray[0]));
+			pilotController.setDesAltitude(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DDF")){
-			String tempArray[] = str.substring(4).split(",");
-			pilotController.setDesDistFront(Double.parseDouble(tempArray[0]));
+			pilotController.setDesDistFront(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DDL")){
-			String tempArray[] = str.substring(4).split(",");
-			pilotController.setDesDistLeft(Double.parseDouble(tempArray[0]));
+			pilotController.setDesDistLeft(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DDR")){
-			String tempArray[] = str.substring(4).split(",");
-			pilotController.setDesDistRight(Double.parseDouble(tempArray[0]));
+			pilotController.setDesDistRight(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DAN")){
-			String tempArray[] = str.substring(4).split(",");
-			pilotController.setDesAngle(Double.parseDouble(tempArray[0]));
+			pilotController.setDesAngle(Double.parseDouble(str.substring(4)));
 		} else {
 			xbeeInterface.write("Error parsing. " + str);
 		}
