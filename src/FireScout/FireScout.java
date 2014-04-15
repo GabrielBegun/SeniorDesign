@@ -57,13 +57,13 @@ public class FireScout {
 			e.printStackTrace();
 			logger.writeError("FireScout: ToManyListenersException, quitting program");
 			xbeeInterface
-					.write("FireScout: ToManyListenersException, quitting program");
+			.write("FireScout: ToManyListenersException, quitting program");
 			System.exit(0);
 		} catch (UartFailException e) {
 			e.printStackTrace();
 			logger.writeError("FireScout: UartFailException, quitting program");
 			xbeeInterface
-					.write("FireScout: UartFailException, quitting program");
+			.write("FireScout: UartFailException, quitting program");
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -112,41 +112,42 @@ public class FireScout {
 			Param.kP_t = Double.parseDouble(tempArray[0]);
 			Param.kI_t = Double.parseDouble(tempArray[1]);
 			Param.kD_t = Double.parseDouble(tempArray[2]);
-			xbeeInterface.write("Reporting new values: " + Param.kP_t + " "
+			xbeeInterface.write("Reporting new values TPID: " + Param.kP_t + " "
 					+ Param.kI_t + " " + Param.kD_t);
-			logger.writeDebug("Reporting new values: " + Param.kP_t + " "
+			logger.writeDebug("Reporting new values TPID: " + Param.kP_t + " "
 					+ Param.kI_t + " " + Param.kD_t);
 		} else if (str.contains("PPID")) {	
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_p = Double.parseDouble(tempArray[0]);
 			Param.kI_p = Double.parseDouble(tempArray[1]);
 			Param.kD_p = Double.parseDouble(tempArray[2]);
-			xbeeInterface.write("Reporting new values: " + Param.kP_p + " "
+			xbeeInterface.write("Reporting new values PPID: " + Param.kP_p + " "
 					+ Param.kI_p + " " + Param.kD_p);
-			logger.writeDebug("Reporting new values: " + Param.kP_p + " "
+			logger.writeDebug("Reporting new values PPID: " + Param.kP_p + " "
 					+ Param.kI_p + " " + Param.kD_p);
 		} else if (str.contains("RPID")) {
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_r = Double.parseDouble(tempArray[0]);
 			Param.kI_r = Double.parseDouble(tempArray[1]);
 			Param.kD_r = Double.parseDouble(tempArray[2]);
-			xbeeInterface.write("Reporting new values: " + Param.kP_r + " "
+			xbeeInterface.write("Reporting new values RPID: " + Param.kP_r + " "
 					+ Param.kI_r + " " + Param.kD_r);
-			logger.writeDebug("Reporting new values: " + Param.kP_r + " "
+			logger.writeDebug("Reporting new values RPID: " + Param.kP_r + " "
 					+ Param.kI_r + " " + Param.kD_r);
 		} else if (str.contains("YPID")) {
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_y = Double.parseDouble(tempArray[0]);
 			Param.kI_y = Double.parseDouble(tempArray[1]);
 			Param.kD_y = Double.parseDouble(tempArray[2]);
-			xbeeInterface.write("Reporting new values: " + Param.kP_y + " "
+			xbeeInterface.write("Reporting new values YPID: " + Param.kP_y + " "
 					+ Param.kI_y + " " + Param.kD_y);
-			logger.writeDebug("Reporting new values: " + Param.kP_y + " "
+			logger.writeDebug("Reporting new values YPID: " + Param.kP_y + " "
 					+ Param.kI_y + " " + Param.kD_y);
 		} else if (str.contains("DAL")){
 			pilotController.setDesAltitude(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DDF")){
 			pilotController.setDesDistFront(Double.parseDouble(str.substring(4)));
+			xbeeInterface.write("GOT A NEW DDF "+Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DDL")){
 			pilotController.setDesDistLeft(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DDR")){
@@ -154,7 +155,7 @@ public class FireScout {
 		} else if (str.contains("DAN")){
 			pilotController.setDesAngle(Double.parseDouble(str.substring(4)));
 		} else {
-			xbeeInterface.write("Error parsing. " + str);
+			xbeeInterface.write("FireScout: Error parsing from XBee. " + str);
 		}
 
 	}
@@ -237,7 +238,7 @@ public class FireScout {
 					nextState = State.DISARM;
 					// temp
 					break;
-				// return;
+					// return;
 
 				default:
 					nextState = State.LAND;
