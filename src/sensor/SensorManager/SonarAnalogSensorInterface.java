@@ -27,8 +27,8 @@ public class SonarAnalogSensorInterface{
 		ANALOG_TO_CM *= REFERENCE_VOLTAGE;
 		ANALOG_TO_CM *= DIVISION_FACTOR;
 		ANALOG_TO_CM /= BITMAX_VALUE;
-		ANALOG_TO_CM *= VCC;
-		ANALOG_TO_CM *= MM_TO_CM;
+		ANALOG_TO_CM /= VCC;
+		ANALOG_TO_CM /= MM_TO_CM;
 	}
 
 	public void getRanging(){
