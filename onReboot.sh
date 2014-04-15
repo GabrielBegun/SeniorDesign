@@ -10,6 +10,7 @@ BASE_DIRECTORY="/home/root/SeniorDesign"
 LOG_DIRECTORY="/home/root/logs"
 $BASE_DIRECTORY/send_mail.sh
 mkdir $BASE_DIRECTORY/bin
+rm ../logs/*.txt
 printf "\n\n" >> $LOG_DIRECTORY/update_log.txt
 echo $(date) >> $LOG_DIRECTORY/update_log.txt
 printf "\n\n" >> $LOG_DIRECTORY/onRebootRun_log.txt
