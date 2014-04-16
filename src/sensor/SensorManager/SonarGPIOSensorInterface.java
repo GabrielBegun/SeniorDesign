@@ -33,7 +33,6 @@ public class SonarGPIOSensorInterface{
 		double range = -1;
 		String s = "";
 		try{
-			System.out.println("GPIO..");
 			Process p = Runtime.getRuntime().exec("/home/root/SeniorDesign/bin/sensor/SensorManager/" + C_CALL_NAME + " " + trig_pin + " " + echo_pin);
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			while((s = stdInput.readLine()) != null){
