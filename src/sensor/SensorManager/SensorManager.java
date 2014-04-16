@@ -119,7 +119,7 @@ public class SensorManager implements Runnable{
 				}
 
 				if(sonar_g_counterB == SONAR_GPIO_TIMER){
-					if(Param.GPIO_ACTIVE || PRINT_GPIO}){
+					if(Param.GPIO_ACTIVE || PRINT_GPIO){
 						for(int ii = 0; ii < GPIOB.length; ii++){
 							underling_sonar_gpio[GPIOB[ii]].getRanging();
 						}
@@ -132,7 +132,7 @@ public class SensorManager implements Runnable{
 				if(print_counter == PRINT_DELAY){
 					if(PRINT_GPIO){
 						Runtime.getRuntime().exec("clear");
-						for(int ii = 0; ii < NUM_GPIO_SENSORS){
+						for(int ii = 0; ii < NUM_GPIO_SENSORS; ii++){
 							System.out.println(String.format("ID[%d] = %f", NUM_LASER_SENSORS+NUM_ANALOG_SENSORS+ii, ranges[NUM_LASER_SENSORS+NUM_ANALOG_SENSORS+ii]));
 						}
 					}
