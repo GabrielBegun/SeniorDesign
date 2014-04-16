@@ -23,6 +23,7 @@ public class SonarGPIOSensorInterface{
 	}
 
 	public void init(){
+		System.out.println(String.format("Init Sensor with ID %d, trig pin %d, echo pin %d", ID, trig_pin, echo_pin));
 		theBoss = SensorManager.getInstance();
 		log = Logger.getInstance();
 		log.writeStandard(String.format("Sensor with ID %d initialized\n",ID));
