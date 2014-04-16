@@ -196,7 +196,7 @@ public class PilotController implements Runnable {
 	
 	
 	private void sendXBeeSensorData() {
-		xbeeInterface.write("PilotController: " + sensorManager.ranges[0] + "," + 
+		xbeeInterface.write("PilotController: Sensor " + sensorManager.ranges[0] + "," + 
 												  sensorManager.ranges[1] + "," + 
 												  sensorManager.ranges[2] + "," + 
 												  sensorManager.ranges[3] + "," + 
