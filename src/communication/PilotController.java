@@ -215,10 +215,10 @@ public class PilotController implements Runnable {
 		this.arm();
 		pilot.sendMessage();
 		Thread.sleep(1500);
-		pilot.setDesHeight(45);
-		pilot.setThrottle(120);
-		pilot.sendMessage();
-		/*
+		//pilot.setDesHeight(45);
+		//pilot.setThrottle(120);
+		//pilot.sendMessage();
+		
 		int current_throttle = Param.throttleMin;
 		while(current_throttle < Param.throttleHover) {
 			current_throttle += Param.throttleDeltaMaxUP;
@@ -227,19 +227,19 @@ public class PilotController implements Runnable {
 			Thread.sleep(Param.loopDelay);
 		}
 		prevThrottle = current_throttle;
-		this.setDesAltitude(60);*/
+		this.setDesAltitude(60);
 	}
 
 	private void land_run() throws InterruptedException{
-		/*int current_throttle = prevThrottle;
+		int current_throttle = prevThrottle;
 		while(current_throttle > Param.throttleLand){
 			current_throttle += Param.throttleDeltaMaxDOWN;
 			pilot.setThrottle(current_throttle);
 			pilot.sendMessage();
 			Thread.sleep(Param.loopDelay);
-		}*/
-		pilot.setDesHeight(10);
-		pilot.sendMessage();
+		}
+		//pilot.setDesHeight(10);
+		//pilot.sendMessage();
 		Thread.sleep(5000);
 		this.disarm();
 		pilot.sendMessage();
@@ -273,10 +273,10 @@ public class PilotController implements Runnable {
 				case PIDCONTROL:
 					if(status_update_count++ %Param.statusUpdatedCountMod == 0) sendXBeePIDTarget();
 					// TODO
-					/*current_altitude = sensorManager.ranges[1];
+					current_altitude = sensorManager.ranges[1];
 					setThrottleWithAltitude(current_altitude); 
 					current_lasetDist = sensorManager.ranges[0];
-					setPitchWithLaser(current_lasetDist);*/
+					setPitchWithLaser(current_lasetDist);
 					
 					pilot.sendMessage();
 					Thread.sleep(Param.loopDelay);  
