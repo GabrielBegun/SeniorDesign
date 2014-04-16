@@ -21,11 +21,14 @@ public class SensorManager implements Runnable{
 	private final int LASER_TIMER = 17;
 	private final int SONAR_ANALOG_TIMER = 20;
 	private final int SONAR_GPIO_TIMER = 24;
+	private final int PRINT_DELAY = 50;
 
 	private final int[] GPIOA = {0, 2, 4, 6};
 	private final int[] GPIOB = {1, 3, 5, 7};
 
 	private final int DELAY = 5;
+
+	private final boolean PRINT_GPIO = true;
 
 
 	private LaserSensorInterface underling_laser;
@@ -35,7 +38,7 @@ public class SensorManager implements Runnable{
 	public double[] sensorPosition; //position from middle of the side in cm. +is to the right, - is to the left. 0 = laser, 1-2 = analog sonar, 3-10 = gpio sonar
 	public double[] ranges;		//most recent ranging data 0 = laser, 1 = analog sonar, 2-9 = gpio sonar. If this value is -1, then there was an error with the sensor (implemented)
 								//most recent ranging data 0 = laser, 1-2 = analog sonar, 3-10 = gpio sonar. If this value is -1, then there was an error with the sensor
-
+	
 	private final int[] GPIO_PINS = {48, 49, 60, 51, 7, 66, 69, 45, 23, 47, 27, 22, 67, 68, 44, 26, 46, 65};
 	private final int[] ANALOG_PINS = {1, 2, 3, 4, 5, 6, 0};
 
@@ -74,7 +77,7 @@ public class SensorManager implements Runnable{
 
 	public void addRange(double range, int ID){
 		ranges[ID] = range;
-		System.out.println(String.format("ID %d = %f", ID, range));
+		if(!PRINT_GPIO) System.out.println(String.format("ID %d = %f", ID, range));
 	}
 
 	public void run(){
@@ -82,11 +85,12 @@ public class SensorManager implements Runnable{
 		int sonar_a_counter = 0;
 		int sonar_g_counterA = 0;
 		int sonar_g_counterB = SONAR_GPIO_TIMER/2;
+		int print_counter = 0;
 
 		while(true){
 			try{
 				if(laser_counter == LASER_TIMER){
-					if(Param.LASER_ACTIVE)
+					if(Param.LASER_ACTIVE && !PRINT_GPIO)
 						underling_laser.getRanging();
 					laser_counter = 0;
 				} else{
@@ -94,7 +98,7 @@ public class SensorManager implements Runnable{
 				}
 
 				if(sonar_a_counter == SONAR_ANALOG_TIMER){
-					if(Param.ANALOG_ACTIVE){
+					if(Param.ANALOG_ACTIVE && !PRINT_GPIO){
 						for(int ii = 0; ii < NUM_ANALOG_SENSORS; ii++)
 							underling_sonar_analog[ii].getRanging();
 					}
@@ -104,7 +108,7 @@ public class SensorManager implements Runnable{
 				}
 
 				if(sonar_g_counterA == SONAR_GPIO_TIMER){
-					if(Param.GPIO_ACTIVE){
+					if(Param.GPIO_ACTIVE || PRINT_GPIO){
 						for(int ii = 0; ii < GPIOA.length; ii++){
 							underling_sonar_gpio[GPIOA[ii]].getRanging();
 						}
@@ -115,7 +119,7 @@ public class SensorManager implements Runnable{
 				}
 
 				if(sonar_g_counterB == SONAR_GPIO_TIMER){
-					if(Param.GPIO_ACTIVE){
+					if(Param.GPIO_ACTIVE || PRINT_GPIO}){
 						for(int ii = 0; ii < GPIOB.length; ii++){
 							underling_sonar_gpio[GPIOB[ii]].getRanging();
 						}
@@ -124,6 +128,18 @@ public class SensorManager implements Runnable{
 				} else{
 					sonar_g_counterB++;
 				}
+
+				if(print_counter == PRINT_DELAY){
+					if(PRINT_GPIO){
+						Runtime.getRuntime().exec("clear");
+						for(int ii = 0; ii < NUM_GPIO_SENSORS){
+							System.out.println(String.format("ID[%d] = %f", NUM_LASER_SENSORS+NUM_ANALOG_SENSORS+ii, ranges[NUM_LASER_SENSORS+NUM_ANALOG_SENSORS+ii]));
+						}
+					}
+				}else{
+					print_counter++;
+				}
+				
 				Thread.sleep(DELAY);
 			} catch(IOException e){
 				System.out.println("Error in SensorManager run");
