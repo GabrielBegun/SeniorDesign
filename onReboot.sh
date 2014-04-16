@@ -36,6 +36,7 @@ if [[ "$val" == "1" ]]
 		echo "Compiling..."
 		echo "compile" >> $LOG_DIRECTORY/onRebootRun_log.txt
 		$BASE_DIRECTORY/compile.sh &>> $LOG_DIRECTORY/compile_log.txt
+		cp $BASE_DIRECTORY/bin/sensor/SensorManager/s_gpio $BASE_DIRECTORY/bin
 		echo 0 > /sys/class/gpio/gpio46/value
 		sleep 1
 		echo 1 > /sys/class/gpio/gpio46/value
