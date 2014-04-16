@@ -137,6 +137,7 @@ public class SensorManager implements Runnable{
 							System.out.println(String.format("ID[%d] = %f", NUM_LASER_SENSORS+NUM_ANALOG_SENSORS+ii, ranges[NUM_LASER_SENSORS+NUM_ANALOG_SENSORS+ii]));
 						}
 					}
+					print_counter = 0;
 				}else{
 					print_counter++;
 				}
