@@ -21,7 +21,7 @@ public class SensorManager implements Runnable{
 	private final int LASER_TIMER = 17;
 	private final int SONAR_ANALOG_TIMER = 20;
 	private final int SONAR_GPIO_TIMER = 24;
-	private final int PRINT_DELAY = 50;
+	private final int PRINT_DELAY = 100;
 
 	private final int[] GPIOA = {0, 2, 4, 6};
 	private final int[] GPIOB = {1, 3, 5, 7};
