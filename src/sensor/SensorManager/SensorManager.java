@@ -109,6 +109,7 @@ public class SensorManager implements Runnable{
 
 				if(sonar_g_counterA == SONAR_GPIO_TIMER){
 					if(Param.GPIO_ACTIVE || PRINT_GPIO){
+						System.out.println("GPIOA");
 						for(int ii = 0; ii < GPIOA.length; ii++){
 							underling_sonar_gpio[GPIOA[ii]].getRanging();
 						}
@@ -120,6 +121,7 @@ public class SensorManager implements Runnable{
 
 				if(sonar_g_counterB == SONAR_GPIO_TIMER){
 					if(Param.GPIO_ACTIVE || PRINT_GPIO){
+						System.out.println("GPIOB");
 						for(int ii = 0; ii < GPIOB.length; ii++){
 							underling_sonar_gpio[GPIOB[ii]].getRanging();
 						}
