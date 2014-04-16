@@ -213,6 +213,7 @@ public class PilotController implements Runnable {
 	private void takeoff_run() throws InterruptedException {
 		this.clearVariables();
 		this.arm();
+		pilot.sendMessage();
 		Thread.sleep(1500);
 		pilot.setDesHeight(45);
 		/*
@@ -236,8 +237,10 @@ public class PilotController implements Runnable {
 			Thread.sleep(Param.loopDelay);
 		}*/
 		pilot.setDesHeight(10);
+		pilot.sendMessage();
 		Thread.sleep(5000);
 		this.disarm();
+		pilot.sendMessage();
 		this.clearVariables();
 	}
 	
