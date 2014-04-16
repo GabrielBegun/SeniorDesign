@@ -17,7 +17,6 @@ long TIMEOUT = 1000;
 char *trig_pin, *echo_pin;
 
 int main(int argc, char *argv[]){
-	printf("GPIO C CODE FIRE");
 	  if(argc == 1){
         trig_pin = "48";
         echo_pin = "49";
