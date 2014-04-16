@@ -189,9 +189,9 @@ public class PilotController implements Runnable {
 	public void shutdownConroller() { shutdown = false; }
 
 	
-	private void sendXBeeStatus(){
-		xbeeInterface.write("PilotController: Status "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
-		logger.writeStandard("PilotController: Status "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
+	private void sendXBeePIDTarget(){
+		xbeeInterface.write("PilotController: PIDTarget "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
+		logger.writeStandard("PilotController: PIDTarget "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
 	}
 	
 	private enum State {
@@ -222,7 +222,7 @@ public class PilotController implements Runnable {
 			Thread.sleep(Param.loopDelay);
 		}
 		prevThrottle = current_throttle;
-		this.setDesAltitude(100);
+		this.setDesAltitude(60);
 	}
 
 	private void land_run() throws InterruptedException{
@@ -263,7 +263,7 @@ public class PilotController implements Runnable {
 					nextState = State.PIDCONTROL;
 					break;
 				case PIDCONTROL:
-					if(status_update_count++ %Param.statusUpdatedCountMod == 0) sendXBeeStatus();
+					if(status_update_count++ %Param.statusUpdatedCountMod == 0) sendXBeePIDTarget();
 					// TODO
 					current_altitude = sensorManager.ranges[1];
 					setThrottleWithAltitude(current_altitude); 
