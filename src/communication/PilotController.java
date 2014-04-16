@@ -216,6 +216,8 @@ public class PilotController implements Runnable {
 		pilot.sendMessage();
 		Thread.sleep(1500);
 		pilot.setDesHeight(45);
+		pilot.setThrottle(120);
+		pilot.sendMessage();
 		/*
 		int current_throttle = Param.throttleMin;
 		while(current_throttle < Param.throttleHover) {
