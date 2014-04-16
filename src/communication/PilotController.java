@@ -194,20 +194,6 @@ public class PilotController implements Runnable {
 		logger.writeStandard("PilotController: Status "+desAltitude+","+desDist_front+","+desDist_left+","+desDist_right+","+desAngle);
 	}
 	
-	
-	private void sendXBeeSensorData() {
-		xbeeInterface.write("PilotController: Sensor " + sensorManager.ranges[0] + "," + 
-												  sensorManager.ranges[1] + "," + 
-												  sensorManager.ranges[2] + "," + 
-												  sensorManager.ranges[3] + "," + 
-												  sensorManager.ranges[4] + "," + 
-												  sensorManager.ranges[5] + "," + 
-												  sensorManager.ranges[6] + "," + 
-												  sensorManager.ranges[7] + "," + 
-												  sensorManager.ranges[8] + "," + 
-												  sensorManager.ranges[9]);
-	}	
-	
 	private enum State {
 		TAKEOFF,
 		PIDCONTROL,

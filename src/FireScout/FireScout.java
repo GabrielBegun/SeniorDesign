@@ -107,7 +107,18 @@ public class FireScout {
 			xbeeInterface.write("FireScout: STOP");
 			logger.writeError("FireScout: STOP");
 			pilotController.emergencyStop();
-		} else if (str.contains("TPID")) {
+		} else if (str.equals("DataPing")){
+			xbeeInterface.write("FireScout: Sensor " + sensorManager.ranges[0] + "," + 
+					  sensorManager.ranges[1] + "," + 
+					  sensorManager.ranges[2] + "," + 
+					  sensorManager.ranges[3] + "," + 
+					  sensorManager.ranges[4] + "," + 
+					  sensorManager.ranges[5] + "," + 
+					  sensorManager.ranges[6] + "," + 
+					  sensorManager.ranges[7] + "," + 
+					  sensorManager.ranges[8] + "," + 
+					  sensorManager.ranges[9]);
+			} else if (str.contains("TPID")) {
 			String tempArray[] = str.substring(5).split(",");
 			Param.kP_t = Double.parseDouble(tempArray[0]);
 			Param.kI_t = Double.parseDouble(tempArray[1]);
@@ -154,8 +165,6 @@ public class FireScout {
 			pilotController.setDesDistRight(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DAN")){
 			pilotController.setDesAngle(Double.parseDouble(str.substring(4)));
-		} else if (str.equals("DataPing")){
-			pilotController.sendXBeeSensorData();
 		}
 		else {
 			xbeeInterface.write("FireScout: Error parsing from XBee. " + str);
