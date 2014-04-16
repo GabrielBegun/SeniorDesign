@@ -41,6 +41,7 @@ public class SonarGPIOSensorInterface{
 			}
 			range = Double.parseDouble(s);
 		} catch(IOException e){
+			System.out.println("Exception");
 			log.writeError(String.format("SensorGPIOSensorInterface::getRanging error - Sensor with ID %d\n",ID));
 			range = -1;
 			//System.out.println("Exception occured. " + s);
