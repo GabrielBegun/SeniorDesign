@@ -130,6 +130,7 @@ public class SensorManager implements Runnable{
 				}
 
 				if(print_counter == PRINT_DELAY){
+					System.out.println("###################################");
 					if(PRINT_GPIO){
 						Runtime.getRuntime().exec("clear");
 						for(int ii = 0; ii < NUM_GPIO_SENSORS; ii++){
