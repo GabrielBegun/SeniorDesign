@@ -71,6 +71,7 @@ public class Pilot{
 	public void setRoll(int v){ messageQueue.add(String.format("r%04d ",v)); }
 	public void setThrottle(int v){ messageQueue.add(String.format("t%04d ",v)); }
 	public void setArmed(int v){ messageQueue.add(String.format("a%04d ",v)); }  
+	public void setDesHeight(int v) { messageQueue.add(String.format("h%04d ",v)); } 
 	public void powerOff() {
 		messageQueue.add("z0001");
 		sendMessage();
