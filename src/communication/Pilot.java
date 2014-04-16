@@ -22,7 +22,6 @@ public class Pilot{
 		uartArduPilot.serialPort.addEventListener(new PilotSerialPortEventListener()); // Throws, fails if initialize fails
 		logger = Logger.getInstance();
 		xBeeInterface = XbeeInterface.getInstance();
-		pilotController = PilotController.getInstance();
 	}
 	public static Pilot getInstance() throws TooManyListenersException, UartFailException{
 		if(myPilot == null) myPilot = new Pilot();
@@ -32,7 +31,6 @@ public class Pilot{
 	private UartDriver uartArduPilot;
 	private Logger logger;
 	private XbeeInterface xBeeInterface;
-	private PilotController pilotController;
 	private static Queue<String> messageQueue = new LinkedList<String>();
 
 	// Variables read from ArduPilot
@@ -97,9 +95,6 @@ public class Pilot{
 	public void parseCommand(String str){
 		if (str.length() < 8)
 			return;
-		else if (str.contains("DataPing")) {
-			pilotController.sendXBeeSensorData();
-		}
 		else {
 			String dataArray[] = str.substring(9).split(",");
 			

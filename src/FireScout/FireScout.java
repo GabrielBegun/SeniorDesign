@@ -154,7 +154,10 @@ public class FireScout {
 			pilotController.setDesDistRight(Double.parseDouble(str.substring(4)));
 		} else if (str.contains("DAN")){
 			pilotController.setDesAngle(Double.parseDouble(str.substring(4)));
-		} else {
+		} else if (str.contains("DataPing")){
+			pilotController.sendXBeeSensorData();
+		}
+		else {
 			xbeeInterface.write("FireScout: Error parsing from XBee. " + str);
 		}
 
