@@ -58,5 +58,5 @@ public class Param {
 	//Sensor mananger
 	public static final boolean LASER_ACTIVE = true;
 	public static final boolean ANALOG_ACTIVE = true;
-	public static final boolean GPIO_ACTIVE = false;
+	public static final boolean GPIO_ACTIVE = true;
 }
