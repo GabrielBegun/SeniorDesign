@@ -248,6 +248,7 @@ public class PilotController implements Runnable {
 	
 	private void takeoff_land_run() throws InterruptedException{
 		this.takeoff_run();
+		Thread.sleep(5000);
 		this.land_run();
 	}
 
