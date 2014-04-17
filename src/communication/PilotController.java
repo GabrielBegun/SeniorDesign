@@ -240,7 +240,7 @@ public class PilotController implements Runnable {
 		}
 		//pilot.setDesHeight(10);
 		//pilot.sendMessage();
-		Thread.sleep(5000);
+		Thread.sleep(10000);
 		this.disarm();
 		pilot.sendMessage();
 		this.clearVariables();
