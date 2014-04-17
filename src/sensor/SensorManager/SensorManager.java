@@ -28,7 +28,7 @@ public class SensorManager implements Runnable{
 
 	private final int DELAY = 5;
 
-	private final boolean PRINT_GPIO = true;
+	private final boolean PRINT_GPIO = false;
 
 
 	private LaserSensorInterface underling_laser;
