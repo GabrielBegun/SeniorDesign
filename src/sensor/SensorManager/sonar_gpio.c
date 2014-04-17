@@ -13,6 +13,7 @@ void pulse_out(int fd, long microseconds);
 int pulse_in(int fd, char *pin);
 struct sched_param param;
 long TIMEOUT = 1000;
+long ACTIVE_TIMEOUT = 30000;
 
 char *trig_pin, *echo_pin;
 
@@ -226,6 +227,10 @@ int pulse_in(int fd, char *pin){
         end = 1;
       //  printf("TIMEOUT IN LOOP");
       } 
+      if(temp_time.tv_usec - run_start.tv_usec > ACTIVE_TIMEOUT){
+      	start = 0;
+      	end = 1;
+      }
     }
     if(start && end)
         printf("%f\n\0", (float)(e_time.tv_usec - s_time.tv_usec)/58.0);
