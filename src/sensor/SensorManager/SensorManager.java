@@ -76,7 +76,7 @@ public class SensorManager implements Runnable{
 
 	public void addRange(double range, int ID){
 		ranges[ID] = range;
-		if(!PRINT_GPIO) System.out.println(String.format("ID %d = %f", ID, range));
+		System.out.println(String.format("ID %d = %f", ID, range));
 	}
 
 	public void run(){
