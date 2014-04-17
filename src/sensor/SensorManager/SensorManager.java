@@ -28,6 +28,8 @@ public class SensorManager implements Runnable{
 
 	private final int DELAY = 5;
 
+	private volatile boolean shutdown = false;
+	public void shutdownManager() { shutdown = false; }
 
 
 	private LaserSensorInterface underling_laser;
@@ -86,7 +88,7 @@ public class SensorManager implements Runnable{
 		int sonar_g_counterB = SONAR_GPIO_TIMER/2;
 		int print_counter = 0;
 
-		while(true){
+		while (!shutdown) {
 			try{
 				if(laser_counter == LASER_TIMER){
 					if(Param.LASER_ACTIVE)
@@ -131,12 +133,14 @@ public class SensorManager implements Runnable{
 				Thread.sleep(DELAY);
 			} catch(IOException e){
 				System.out.println("Error in SensorManager run");
+				Logger.getInstance().writeError("SensorManager: IOException");
+				XbeeInterface.getInstance().write("SensorManager: IOException");
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				e.printStackTrace();
-				Logger.getInstance().writeError("PilotController: InterruptedException. Exit");
-				XbeeInterface.getInstance().write("PilotController: InterruptedException. Exit");
+				Logger.getInstance().writeError("SensorManager: InterruptedException. Exit");
+				XbeeInterface.getInstance().write("SensorManager: InterruptedException. Exit");
 				System.exit(0);
 				
 			}
