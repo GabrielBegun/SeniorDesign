@@ -13,7 +13,7 @@ void pulse_out(int fd, long microseconds);
 int pulse_in(int fd, char *pin);
 struct sched_param param;
 long TIMEOUT = 1000;
-long ACTIVE_TIMEOUT = 30000;
+long ACTIVE_TIMEOUT = 60000;
 
 char *trig_pin, *echo_pin;
 
