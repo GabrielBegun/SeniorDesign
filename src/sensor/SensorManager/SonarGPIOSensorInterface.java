@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.Exception;
 
+import communication.XbeeInterface;
+
 import Logger.Logger;
 
 
@@ -27,6 +29,7 @@ public class SonarGPIOSensorInterface{
 		theBoss = SensorManager.getInstance();
 		log = Logger.getInstance();
 		log.writeStandard(String.format("Sensor with ID %d initialized\n",ID));
+		XbeeInterface.getInstance().write(String.format("Sensor with ID %d initialized\n",ID));
 	}
 
 	public void getRanging(){
@@ -42,6 +45,7 @@ public class SonarGPIOSensorInterface{
 		} catch(IOException e){
 			System.out.println("Exception");
 			log.writeError(String.format("SensorGPIOSensorInterface::getRanging error - Sensor with ID %d\n",ID));
+			XbeeInterface.getInstance().write(String.format("SensorGPIOSensorInterface::getRanging error - Sensor with ID %d\n",ID));
 			range = -1;
 			//System.out.println("Exception occured. " + s);
 			//e.printStackTrace();

@@ -1,6 +1,9 @@
 package sensor.SensorManager;
 
 import java.io.*;
+
+import communication.XbeeInterface;
+
 import Logger.Logger;
 
 public class SonarAnalogSensorInterface{
@@ -57,6 +60,7 @@ public class SonarAnalogSensorInterface{
 			rr *= ANALOG_TO_CM;
 		} catch(IOException e){
 			log.writeError(String.format("SensorAnalogSensorInterface::getRanging IO error - Sensor with ID %d\n",ID));
+			XbeeInterface.getInstance().write(String.format("SensorAnalogSensorInterface::getRanging IO error - Sensor with ID %d\n",ID));
 			rr = -1;
 			//System.out.println("Error. IOException with reading port");
 		} 
